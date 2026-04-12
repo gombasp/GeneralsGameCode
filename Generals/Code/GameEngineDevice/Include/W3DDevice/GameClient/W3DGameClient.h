@@ -45,7 +45,11 @@
 #include "W3DDevice/GameClient/W3DGameWindowManager.h"
 #include "W3DDevice/GameClient/W3DGameFont.h"
 #include "W3DDevice/GameClient/W3DDisplayStringManager.h"
+#ifdef __EMSCRIPTEN__
+#include "VideoDevice/NullVideoPlayer.h"
+#else
 #include "VideoDevice/Bink/BinkVideoPlayer.h"
+#endif
 #include "Win32Device/GameClient/Win32DIKeyboard.h"
 #include "Win32Device/GameClient/Win32DIMouse.h"
 #include "Win32Device/GameClient/Win32Mouse.h"
@@ -107,7 +111,14 @@ protected:
   /// Manager for display strings
 	virtual DisplayStringManager *createDisplayStringManager() override { return NEW W3DDisplayStringManager; }
 
-	virtual VideoPlayerInterface *createVideoPlayer() override { return NEW BinkVideoPlayer; }
+	virtual VideoPlayerInterface *createVideoPlayer() override
+	{
+#ifdef __EMSCRIPTEN__
+		return NEW NullVideoPlayer;
+#else
+		return NEW BinkVideoPlayer;
+#endif
+	}
 	/// factory for creating the TerrainVisual
 	virtual TerrainVisual *createTerrainVisual() override { return NEW W3DTerrainVisual; }
 

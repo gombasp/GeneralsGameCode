@@ -75,7 +75,9 @@ static void drawFramerateBar();
 #include "W3DDevice/GameClient/W3DScene.h"
 #include "W3DDevice/GameClient/W3DTerrainTracks.h"
 #include "W3DDevice/GameClient/W3DWater.h"
+#ifndef __EMSCRIPTEN__
 #include "W3DDevice/GameClient/W3DVideoBuffer.h"
+#endif
 #include "W3DDevice/GameClient/W3DShaderManager.h"
 #include "W3DDevice/GameClient/W3DDebugDisplay.h"
 #include "W3DDevice/GameClient/W3DProjectedShadow.h"
@@ -2653,6 +2655,7 @@ void W3DDisplay::drawImage( const Image *image, Int startX, Int startY,
 
 }
 
+#ifndef __EMSCRIPTEN__
 //============================================================================
 // W3DDisplay::createVideoBuffer
 //============================================================================
@@ -2759,6 +2762,11 @@ void W3DDisplay::drawVideoBuffer( VideoBuffer *buffer, Int startX, Int startY, I
 	m_2DRender->Render();
 
 }
+#else // __EMSCRIPTEN__ — video playback disabled, no-op stubs
+VideoBuffer* W3DDisplay::createVideoBuffer() { return nullptr; }
+void W3DDisplay::drawScaledVideoBuffer( VideoBuffer*, VideoStreamInterface* ) {}
+void W3DDisplay::drawVideoBuffer( VideoBuffer*, Int, Int, Int, Int ) {}
+#endif // __EMSCRIPTEN__
 
 // W3DDisplay::setClipRegion ============================================
 /** Set the clipping region for images.
