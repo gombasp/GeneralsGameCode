@@ -48,7 +48,9 @@
 #include "PreRTS.h"
 
 #include <fcntl.h>
+#ifndef __EMSCRIPTEN__
 #include <io.h>
+#endif
 #include <sys/stat.h>
 
 #include "Common/AsciiString.h"

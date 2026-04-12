@@ -33,6 +33,11 @@ Bool ClientInstance::s_isMultiInstance = false;
 
 bool ClientInstance::initialize()
 {
+#ifdef __EMSCRIPTEN__
+	// Browser is always single-instance; mutex not available.
+	s_mutexHandle = (HANDLE)1; // non-null sentinel
+	return true;
+#else
 	if (isInitialized())
 	{
 		return true;
@@ -82,6 +87,7 @@ bool ClientInstance::initialize()
 	}
 
 	return true;
+#endif // __EMSCRIPTEN__
 }
 
 bool ClientInstance::isInitialized()

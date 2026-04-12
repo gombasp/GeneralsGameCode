@@ -39,7 +39,9 @@ static void drawFramerateBar();
 #ifndef __EMSCRIPTEN__
 #include <windows.h>
 #endif
+#ifndef __EMSCRIPTEN__
 #include <io.h>
+#endif
 #include <time.h>
 
 // USER INCLUDES //////////////////////////////////////////////////////////////

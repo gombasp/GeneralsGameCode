@@ -30,7 +30,9 @@
 
 #ifdef _WIN32
 #include <winsock.h>
+#ifndef __EMSCRIPTEN__
 #include <io.h>
+#endif
 //#define close _close
 //#define read  _read
 //#define write _write

@@ -245,3 +245,26 @@ inline DWORD GetLastError() { return 0; }
 #endif
 
 #endif // !_WIN32
+
+// ---------------------------------------------------------------------------
+// QueryPerformanceCounter / QueryPerformanceFrequency
+// Replaced by emscripten_get_now() which gives sub-millisecond precision.
+// ---------------------------------------------------------------------------
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+typedef union { struct { DWORD LowPart; LONG HighPart; }; long long QuadPart; } LARGE_INTEGER;
+typedef LARGE_INTEGER* PLARGE_INTEGER;
+
+inline BOOL QueryPerformanceCounter(LARGE_INTEGER* lp)
+{
+    if (lp) lp->QuadPart = (long long)(emscripten_get_now() * 1000.0); // microseconds
+    return TRUE;
+}
+inline BOOL QueryPerformanceFrequency(LARGE_INTEGER* lp)
+{
+    if (lp) lp->QuadPart = 1000000LL; // 1 MHz = microseconds
+    return TRUE;
+}
+// _LARGE_INTEGER alias used in a few places
+typedef LARGE_INTEGER _LARGE_INTEGER;
+#endif // __EMSCRIPTEN__

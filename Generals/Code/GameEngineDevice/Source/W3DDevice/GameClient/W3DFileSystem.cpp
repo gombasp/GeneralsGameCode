@@ -49,7 +49,9 @@
 #include "Common/Registry.h"
 #include "W3DDevice/GameClient/W3DFileSystem.h"
 
+#ifndef __EMSCRIPTEN__
 #include <io.h>
+#endif
 
 // DEFINES ////////////////////////////////////////////////////////////////////////////////////////
 
