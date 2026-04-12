@@ -39,6 +39,8 @@ class STLSpecialAlloc;
 // different .cpp files, so I bit the bullet and included it here.
 // PLEASE DO NOT ABUSE WINDOWS OR IT WILL BE REMOVED ENTIRELY. :-)
 //--------------------------------------------------------------------------------- System Includes
+#ifndef __EMSCRIPTEN__
+// ---- Native Windows / non-web build -----------------------------------------
 #define WIN32_LEAN_AND_MEAN
 // TheSuperHackers @build JohnsterID 05/01/2026 Add ATL compatibility for MinGW-w64 builds
 #if defined(__GNUC__) && defined(_WIN32)
@@ -88,6 +90,33 @@ class STLSpecialAlloc;
 #endif
 
 #include <dinput.h>
+
+#else // __EMSCRIPTEN__
+// ---- Emscripten / WebAssembly build -----------------------------------------
+// Standard C/C++ headers available in Emscripten's POSIX layer
+#include <assert.h>
+#include <ctype.h>
+#include <float.h>
+#include <limits.h>
+#include <math.h>
+#include <memory.h>
+#include <stdarg.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <time.h>
+#include <unistd.h>     // chdir, access (replaces direct.h + io.h)
+#include <Utility/fstream_adapter.h>
+// Emscripten timing (replaces mmsystem.h timeGetTime)
+#include <emscripten.h>
+// Compat shims already present in the repo (tchar, string, wchar, thread)
+#include <Utility/compat.h>
+// Win32 type aliases needed by engine code
+// DWORD, BOOL, UINT, WORD, BYTE, HANDLE, HWND etc.
+#include <Utility/win32_types_compat.h>
+
+#endif // __EMSCRIPTEN__
 
 //------------------------------------------------------------------------------------ STL Includes
 // srj sez: no, include STLTypesdefs below, instead, thanks

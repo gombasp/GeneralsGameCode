@@ -27,15 +27,23 @@ static inline MMRESULT timeEndPeriod(int) { return TIMERR_NOERROR; }
 
 inline unsigned int timeGetTime()
 {
+#ifdef __EMSCRIPTEN__
+  return (unsigned int)emscripten_get_now();
+#else
   struct timespec ts;
   clock_gettime(CLOCK_BOOTTIME, &ts);
   return ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
+#endif
 }
 inline unsigned int GetTickCount()
 {
+#ifdef __EMSCRIPTEN__
+  return (unsigned int)emscripten_get_now();
+#else
   struct timespec ts;
   clock_gettime(CLOCK_MONOTONIC, &ts);
   // Return ms since boot
   return ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
+#endif
 }
 

@@ -41,6 +41,18 @@
 
 #pragma once
 
+// ---------------------------------------------------------------------------
+// Emscripten / WebGL2 build: include the WebGL2 wrapper and expose it as
+// DX8Wrapper so every existing call site compiles without modification.
+// ---------------------------------------------------------------------------
+#ifdef __EMSCRIPTEN__
+  #include "webgl2wrapper.h"
+  typedef WebGL2Wrapper DX8Wrapper;
+#else
+// ---------------------------------------------------------------------------
+// Native Windows / DX8 build follows
+// ---------------------------------------------------------------------------
+
 #include "always.h"
 #include "dllist.h"
 #include "d3d8.h"
@@ -1421,3 +1433,5 @@ WWINLINE RenderStateStruct& RenderStateStruct::operator= (const RenderStateStruc
 
 	return *this;
 }
+
+#endif // !__EMSCRIPTEN__

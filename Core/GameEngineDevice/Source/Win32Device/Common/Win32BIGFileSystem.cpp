@@ -59,8 +59,8 @@ void Win32BIGFileSystem::init() {
 
 	loadBigFilesFromDirectory("", "*.big");
 
-#if RTS_ZEROHOUR
-    // load original Generals assets
+#if RTS_ZEROHOUR && !defined(__EMSCRIPTEN__)
+    // load original Generals assets (Windows only — registry not available on web)
     AsciiString installPath;
     GetStringFromGeneralsRegistry("", "InstallPath", installPath );
     //@todo this will need to be ramped up to a crash for release

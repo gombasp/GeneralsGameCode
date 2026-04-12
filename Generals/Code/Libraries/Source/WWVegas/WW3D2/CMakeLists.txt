@@ -62,6 +62,8 @@ set(WW3D2_SRC
     #dx8webbrowser.h
     dx8wrapper.cpp
     dx8wrapper.h
+    webgl2wrapper.cpp
+    webgl2wrapper.h
     #dynamesh.cpp
     #dynamesh.h
     #font3d.cpp

@@ -1,0 +1,153 @@
+# CMakeLists_web.txt
+#
+# Emscripten / WebGL2 build for C&C Generals
+#
+# Usage (from repo root):
+#
+#   # One-time emsdk setup (do this once per shell session):
+#   source /path/to/emsdk/emsdk_env.sh
+#
+#   mkdir build_web && cd build_web
+#   emcmake cmake .. \
+#       -DCMAKE_TOOLCHAIN_FILE=/path/to/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake \
+#       -DRTS_WEB_BUILD=ON \
+#       -DCMAKE_BUILD_TYPE=Release \
+#       -f ../Generals/CMakeLists_web.txt
+#   emmake make -j$(nproc)
+#
+# Outputs: build_web/generals.js  generals.wasm  generals.data  index.html
+
+cmake_minimum_required(VERSION 3.25)
+project(g_generals_web LANGUAGES C CXX)
+
+# ---------------------------------------------------------------------------
+# Require Emscripten toolchain
+# ---------------------------------------------------------------------------
+if (NOT EMSCRIPTEN)
+    message(FATAL_ERROR
+        "This CMakeLists is for Emscripten builds only.\n"
+        "Configure with:  emcmake cmake ...")
+endif()
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# ---------------------------------------------------------------------------
+# Source roots (relative to this file which lives in Generals/)
+# ---------------------------------------------------------------------------
+set(SRC_ROOT    "${CMAKE_CURRENT_SOURCE_DIR}/Code")
+set(WW3D2_DIR   "${SRC_ROOT}/Libraries/Source/WWVegas/WW3D2")
+set(MAIN_DIR    "${SRC_ROOT}/Main")
+
+# ---------------------------------------------------------------------------
+# Collect WW3D2 sources – same list as the native CMakeLists.txt
+# but with webgl2wrapper.cpp added and dx8wrapper.cpp excluded
+# (dx8wrapper.cpp guards itself with #ifndef __EMSCRIPTEN__ but excluding
+#  it entirely avoids pulling in d3d8.h)
+# ---------------------------------------------------------------------------
+file(GLOB_RECURSE WW3D2_SOURCES
+    "${WW3D2_DIR}/*.cpp"
+    "${WW3D2_DIR}/*.h"
+)
+list(FILTER WW3D2_SOURCES EXCLUDE REGEX "dx8wrapper\\.cpp$")
+
+# ---------------------------------------------------------------------------
+# Game engine sources (adjust globs to match actual directory layout)
+# ---------------------------------------------------------------------------
+file(GLOB_RECURSE GAME_SOURCES
+    "${SRC_ROOT}/GameEngine/*.cpp"
+    "${SRC_ROOT}/GameEngine/*.h"
+    "${SRC_ROOT}/GameEngineDevice/*.cpp"
+    "${SRC_ROOT}/GameEngineDevice/*.h"
+    "${SRC_ROOT}/Libraries/Source/*.cpp"
+    "${SRC_ROOT}/Libraries/Source/*.h"
+)
+# Exclude WW3D2 (already captured above) and Win32-only device files
+list(FILTER GAME_SOURCES EXCLUDE REGEX "WW3D2/")
+list(FILTER GAME_SOURCES EXCLUDE REGEX "Win32Device/.*DirectInput")
+list(FILTER GAME_SOURCES EXCLUDE REGEX "Win32Device/.*DirectSound")
+list(FILTER GAME_SOURCES EXCLUDE REGEX "MilesSound")
+
+# ---------------------------------------------------------------------------
+# Entry point: EmscriptenMain.cpp instead of WinMain.cpp
+# ---------------------------------------------------------------------------
+set(MAIN_SOURCES
+    "${MAIN_DIR}/EmscriptenMain.cpp"
+)
+
+# ---------------------------------------------------------------------------
+# Executable target
+# ---------------------------------------------------------------------------
+add_executable(g_generals_web
+    ${WW3D2_SOURCES}
+    ${GAME_SOURCES}
+    ${MAIN_SOURCES}
+)
+
+# ---------------------------------------------------------------------------
+# Include paths (mirrors the native build)
+# ---------------------------------------------------------------------------
+target_include_directories(g_generals_web PRIVATE
+    "${SRC_ROOT}/GameEngine/Include"
+    "${SRC_ROOT}/Libraries/Source/WWVegas"
+    "${SRC_ROOT}/Libraries/Source/WWVegas/WW3D2"
+    "${SRC_ROOT}/Main"
+    "${SRC_ROOT}/GameEngineDevice/Include"
+)
+
+# ---------------------------------------------------------------------------
+# Compile definitions
+# ---------------------------------------------------------------------------
+target_compile_definitions(g_generals_web PRIVATE
+    RTS_GENERALS=1
+    __EMSCRIPTEN__=1         # should already be set by toolchain, but be explicit
+    NDEBUG                   # swap for RTS_DEBUG if you want a debug web build
+)
+
+# ---------------------------------------------------------------------------
+# Emscripten link flags
+# ---------------------------------------------------------------------------
+set_target_properties(g_generals_web PROPERTIES
+    OUTPUT_NAME "generals"
+    SUFFIX      ".html"      # emits generals.html + .js + .wasm + .data
+)
+
+target_link_options(g_generals_web PRIVATE
+    # WebGL2
+    -sUSE_WEBGL2=1
+    -sFULL_ES3=1
+
+    # Memory
+    -sALLOW_MEMORY_GROWTH=1
+    -sINITIAL_MEMORY=134217728    # 128 MB
+
+    # WASM output
+    -sWASM=1
+
+    # Exports needed by the JS glue
+    -sEXPORTED_RUNTIME_METHODS=["cwrap","ccall","UTF8ToString","FS"]
+    -sEXPORTED_FUNCTIONS=["_main","_malloc","_free"]
+
+    # Pack assets directory into .data file
+    # Adjust the path to wherever your game data lives relative to the build dir
+    --preload-file ${CMAKE_SOURCE_DIR}/Run/Data@/data
+
+    # Use the custom HTML shell defined below
+    --shell-file ${CMAKE_CURRENT_SOURCE_DIR}/web/index_shell.html
+
+    # Debug helpers (comment out for release)
+    # -sASSERTIONS=2
+    # -sSAFE_HEAP=1
+    # -g2
+)
+
+# ---------------------------------------------------------------------------
+# Optional: pthreads support
+# If you enable this, GL calls MUST still happen on the main thread.
+# ---------------------------------------------------------------------------
+# target_compile_options(g_generals_web PRIVATE -pthread)
+# target_link_options(g_generals_web PRIVATE -sUSE_PTHREADS=1 -sPTHREAD_POOL_SIZE=4)
+
+message(STATUS "Web build configured. Run: emmake make -j$(nproc)")
+message(STATUS "Serve build output with:  python3 -m http.server 8080")
+message(STATUS "Open:                     http://localhost:8080/generals.html")
