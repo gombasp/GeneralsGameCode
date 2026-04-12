@@ -35,6 +35,8 @@
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 
+#ifndef __EMSCRIPTEN__
+
 #include "always.h"
 #include <windows.h>
 #include "WWAudio.h"
@@ -2852,3 +2854,5 @@ WWAudioClass::File_Read_Callback (void *file_handle, void *buffer, U32 bytes)
 
 	return retval;
 }
+
+#endif // __EMSCRIPTEN__

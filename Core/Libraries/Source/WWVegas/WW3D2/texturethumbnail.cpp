@@ -27,7 +27,9 @@
 #include "ffactory.h"
 #include "RAWFILE.h"
 #include "wwprofile.h"
+#ifndef __EMSCRIPTEN__
 #include <windows.h>
+#endif
 
 static DLListClass<ThumbnailManagerClass> ThumbnailManagerList;
 static ThumbnailManagerClass* GlobalThumbnailManager;

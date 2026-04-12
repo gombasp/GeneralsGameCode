@@ -30,6 +30,8 @@
  * Functions:                                                                                  *
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
+#ifndef __EMSCRIPTEN__
+
 #include "always.h"
 #include "Threads.h"
 #include "Utils.h"
@@ -299,3 +301,5 @@ WWAudioThreadsClass::End_Modify_List ()
 }
 */
 
+
+#endif // __EMSCRIPTEN__

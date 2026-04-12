@@ -38,7 +38,9 @@
 #include "INI.h"
 #include "inisup.h"
 #include <assert.h>
+#ifndef __EMSCRIPTEN__
 #include <windows.h>
+#endif
 
 //#include "wwdebug.h"
 

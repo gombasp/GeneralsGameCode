@@ -42,7 +42,9 @@
 #include "TARGA.h"
 #include "tgatodxt.h"
 #include "wwdebug.h"
+#ifndef __EMSCRIPTEN__
 #include <io.h>
+#endif
 #include	<stdlib.h>
 
 // Singletons.

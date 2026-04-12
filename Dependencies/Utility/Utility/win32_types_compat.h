@@ -268,3 +268,28 @@ inline BOOL QueryPerformanceFrequency(LARGE_INTEGER* lp)
 // _LARGE_INTEGER alias used in a few places
 typedef LARGE_INTEGER _LARGE_INTEGER;
 #endif // __EMSCRIPTEN__
+
+// ---------------------------------------------------------------------------
+// Winsock stubs (WSADATA, WSAStartup, WSACleanup)
+// On Emscripten sockets go through the POSIX layer directly; no init needed.
+// ---------------------------------------------------------------------------
+#ifdef __EMSCRIPTEN__
+struct WSADATA { WORD wVersion; WORD wHighVersion; };
+inline int WSAStartup(WORD, WSADATA* d) { if(d){d->wVersion=0x0202;d->wHighVersion=0x0202;} return 0; }
+inline int WSACleanup() { return 0; }
+inline int WSAGetLastError() { return errno; }
+// ioctlsocket — map to fcntl on POSIX
+#include <fcntl.h>
+inline int ioctlsocket(int s, long cmd, unsigned long* argp)
+{
+    if (cmd == 0x8004667EL /*FIONBIO*/) {
+        int flags = fcntl(s, F_GETFL, 0);
+        if (*argp) fcntl(s, F_SETFL, flags | O_NONBLOCK);
+        else       fcntl(s, F_SETFL, flags & ~O_NONBLOCK);
+        return 0;
+    }
+    return -1;
+}
+#define FIONBIO 0x8004667EL
+#define SD_BOTH SHUT_RDWR
+#endif // __EMSCRIPTEN__

@@ -64,6 +64,14 @@ void GetPrecisionTimerTicksPerSec(Int64* t)
 //-------------------------------------------------------------------------------------------------
 void InitPrecisionTimer()
 {
+#ifdef __EMSCRIPTEN__
+	// emscripten_get_now() gives sub-millisecond time directly.
+	// QueryPerformanceFrequency stub returns 1 MHz — set ticks accordingly.
+	s_ticksPerSec   = 1000000.0;
+	s_ticksPerMSec  = 1000.0;
+	s_ticksPerUSec  = 1.0;
+	return;
+#endif
 #ifdef HOFFESOMMER_REPLACEMENT_CODE
 
   // measure clock cycles 3 times for 20 msec each

@@ -71,7 +71,9 @@
 #include "WWFILE.h"
 #include "ffactory.h"
 #else
+#ifndef __EMSCRIPTEN__
 #include <io.h>
+#endif
 #include <fcntl.h>
 #include <sys/stat.h>
 #endif

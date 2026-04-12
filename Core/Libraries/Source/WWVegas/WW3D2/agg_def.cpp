@@ -43,7 +43,9 @@
 #include "texture.h"
 #include "wwstring.h"
 
+#ifndef __EMSCRIPTEN__
 #include <windows.h>
+#endif
 
 
 ///////////////////////////////////////////////////////////////////////////////////

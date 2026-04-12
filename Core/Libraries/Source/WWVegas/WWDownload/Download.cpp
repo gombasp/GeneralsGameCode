@@ -17,6 +17,8 @@
 */
 
 // Download.cpp : Implementation of CDownload
+#ifndef __EMSCRIPTEN__
+
 #include "DownloadDebug.h"
 #include "Download.h"
 #include "stringex.h"
@@ -425,3 +427,5 @@ HRESULT CDownload::PumpMessages()
 	reenter = 0;
 	return DOWNLOAD_SUCCEEDED;
 }
+
+#endif // __EMSCRIPTEN__

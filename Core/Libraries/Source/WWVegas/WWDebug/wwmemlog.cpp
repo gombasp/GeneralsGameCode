@@ -70,7 +70,9 @@
 ** method to use.
 */
 #ifdef _WIN32
+#ifndef __EMSCRIPTEN__
 #include <windows.h>
+#endif
 #define MEMLOG_USE_MUTEX					0
 #define MEMLOG_USE_CRITICALSECTION		1
 #define MEMLOG_USE_FASTCRITICALSECTION	0

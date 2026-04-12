@@ -50,7 +50,9 @@
  #if defined(_WIN32)
 
 #include	"always.h"
+#ifndef __EMSCRIPTEN__
 #include <windows.h>
+#endif
 #include	"assert.h"
 #include "cpudetect.h"
 #include	"Except.h"

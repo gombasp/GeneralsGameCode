@@ -23,6 +23,8 @@
 /*************************************************************************/
 
 
+#ifndef __EMSCRIPTEN__
+
 #include <sys/types.h>
 #include <sys/timeb.h>
 #include <stdlib.h>
@@ -1844,3 +1846,5 @@ bool Prepare_Directories(const char *rootdir, const char *filename)
 
 
 
+
+#endif // __EMSCRIPTEN__

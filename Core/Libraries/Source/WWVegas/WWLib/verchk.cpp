@@ -36,7 +36,9 @@
 
 
 #include "verchk.h"
+#ifndef __EMSCRIPTEN__
 #include <windows.h>
+#endif
 #include <winnt.h>
 #include "RAWFILE.h"
 #include "ffactory.h"
