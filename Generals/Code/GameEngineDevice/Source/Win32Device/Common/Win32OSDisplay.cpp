@@ -26,8 +26,10 @@
 // John McDonald, December 2002
 ////////////////////////////////////////////////////////////
 
+#ifndef __EMSCRIPTEN__
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#endif
 #include "Common/OSDisplay.h"
 
 #include "Common/SubsystemInterface.h"
@@ -38,7 +40,9 @@
 
 
 
+#ifndef __EMSCRIPTEN__
 extern HWND ApplicationHWnd;
+#endif
 
 //-------------------------------------------------------------------------------------------------
 static void RTSFlagsToOSFlags(UnsignedInt buttonFlags, UnsignedInt otherFlags, UnsignedInt& outWindowsFlags)

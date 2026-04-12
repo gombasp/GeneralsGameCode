@@ -34,7 +34,9 @@
 
 #define NO_DEBUG_CRC
 
+#ifndef __EMSCRIPTEN__
 #include <windows.h>
+#endif
 
 #include "Common/crc.h"
 #include "Common/CRCDebug.h"

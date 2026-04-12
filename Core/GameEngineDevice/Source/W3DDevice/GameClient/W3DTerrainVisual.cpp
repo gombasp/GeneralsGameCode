@@ -28,7 +28,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <stdlib.h>
+#ifndef __EMSCRIPTEN__
 #include <windows.h>
+#endif
 
 #include "Common/GameState.h"
 #include "Common/GlobalData.h"

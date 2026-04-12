@@ -28,6 +28,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define WIN32_LEAN_AND_MEAN
+#ifndef __EMSCRIPTEN__
+
 #include <windows.h>
 
 #include "Common/Debug.h"
@@ -472,3 +474,5 @@ void Win32Mouse::releaseCapture()
 	}
 
 }
+
+#endif // __EMSCRIPTEN__

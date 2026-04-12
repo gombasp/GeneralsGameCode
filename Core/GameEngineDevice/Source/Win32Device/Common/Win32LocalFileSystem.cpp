@@ -26,6 +26,8 @@
 // Bryan Cleveland, August 2002
 ////////////////////////////////////////////////////////////
 
+#ifndef __EMSCRIPTEN__
+
 #include <windows.h>
 #include "Common/AsciiString.h"
 #include "Common/GameMemory.h"
@@ -231,3 +233,5 @@ AsciiString Win32LocalFileSystem::normalizePath(const AsciiString& filePath) con
 
 	return normalizedFilePath;
 }
+
+#endif // __EMSCRIPTEN__

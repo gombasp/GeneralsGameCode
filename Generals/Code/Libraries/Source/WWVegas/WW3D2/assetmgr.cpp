@@ -110,7 +110,9 @@
 #include "metalmap.h"
 #include "w3dexclusionlist.h"
 #include <INI.h>
+#ifndef __EMSCRIPTEN__
 #include <windows.h>
+#endif
 #include <d3dx8core.h>
 #include "wwprofile.h"
 #include "assetstatus.h"

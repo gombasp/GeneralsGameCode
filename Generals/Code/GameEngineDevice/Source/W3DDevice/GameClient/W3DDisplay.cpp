@@ -36,7 +36,9 @@ static void drawFramerateBar();
 // SYSTEM INCLUDES ////////////////////////////////////////////////////////////
 #include <numeric>
 #include <stdlib.h>
+#ifndef __EMSCRIPTEN__
 #include <windows.h>
+#endif
 #include <io.h>
 #include <time.h>
 
@@ -655,7 +657,13 @@ void W3DDisplay::init()
 		{
 			SortingRendererClass::SetMinVertexBufferSize(1);
 		}
-		if (WW3D::Init( ApplicationHWnd ) != WW3D_ERROR_OK)
+		if (WW3D::Init(
+#ifdef __EMSCRIPTEN__
+			nullptr
+#else
+			ApplicationHWnd
+#endif
+		) != WW3D_ERROR_OK)
 			throw ERROR_INVALID_D3D;	//failed to initialize.  User probably doesn't have DX 8.1
 
 		WW3D::Set_Prelit_Mode( WW3D::PRELIT_MODE_LIGHTMAP_MULTI_PASS );
@@ -1598,8 +1606,12 @@ void W3DDisplay::draw()
 {
 	//USE_PERF_TIMER(W3DDisplay_draw)
 
+#ifndef __EMSCRIPTEN__
 	extern HWND ApplicationHWnd;
 	if (ApplicationHWnd && ::IsIconic(ApplicationHWnd)) {
+#else
+	if (false) {
+#endif
 		return;
 	}
 

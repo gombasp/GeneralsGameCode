@@ -21,6 +21,8 @@
 // Desc:       Win32 direct input implementation for the mouse
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef __EMSCRIPTEN__
+
 #include <stdlib.h>
 #include <windows.h>
 #include <assert.h>
@@ -506,3 +508,5 @@ void DirectInputMouse::releaseCapture()
 	ReleaseCapture();
 
 }
+
+#endif // __EMSCRIPTEN__

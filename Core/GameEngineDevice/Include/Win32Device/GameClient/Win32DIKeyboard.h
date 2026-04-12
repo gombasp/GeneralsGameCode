@@ -51,7 +51,9 @@
 #	define DIRECTINPUT_VERSION	0x800
 #endif
 
+#ifndef __EMSCRIPTEN__
 #include <dinput.h>
+#endif
 
 // USER INCLUDES //////////////////////////////////////////////////////////////
 #include "GameClient/Keyboard.h"

@@ -28,6 +28,8 @@
 //						using Microsoft Direct Input
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef __EMSCRIPTEN__
+
 #include <windows.h>
 #include <assert.h>
 
@@ -427,3 +429,5 @@ Bool DirectInputKeyboard::getCapsState()
 	return BitIsSet( GetKeyState( VK_CAPITAL ), 0X01);
 
 }
+
+#endif // __EMSCRIPTEN__
