@@ -43,8 +43,12 @@ extern DWORD TheMessageTime;
 //-------------------------------------------------------------------------------------------------
 Win32GameEngine::Win32GameEngine()
 {
+#ifndef __EMSCRIPTEN__
 	// Stop blue screen
 	m_previousErrorMode = SetErrorMode( SEM_FAILCRITICALERRORS );
+#else
+	m_previousErrorMode = 0;
+#endif
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -52,8 +56,10 @@ Win32GameEngine::Win32GameEngine()
 //-------------------------------------------------------------------------------------------------
 Win32GameEngine::~Win32GameEngine()
 {
+#ifndef __EMSCRIPTEN__
 	// restore it (this isn't really necessary, but feels good.)
 	SetErrorMode( m_previousErrorMode );
+#endif
 }
 
 
@@ -85,11 +91,10 @@ void Win32GameEngine::reset()
 //-------------------------------------------------------------------------------------------------
 void Win32GameEngine::update()
 {
-
-
 	// call the engine normal update
 	GameEngine::update();
 
+#ifndef __EMSCRIPTEN__
 	extern HWND ApplicationHWnd;
 	if (ApplicationHWnd && ::IsIconic(ApplicationHWnd)) {
 		while (ApplicationHWnd && ::IsIconic(ApplicationHWnd)) {
@@ -116,49 +121,28 @@ void Win32GameEngine::update()
 
 	// allow windows to perform regular windows maintenance stuff like msgs
 	serviceWindowsOS();
-
+#endif
 }
 
 //-------------------------------------------------------------------------------------------------
 /** This function may be called from within this application to let
-  * Microsoft Windows do its message processing and dispatching.  Presumeably
-	* we would call this at least once each time around the game loop to keep
-	* Windows services from backing up */
+  * Microsoft Windows do its message processing and dispatching. */
 //-------------------------------------------------------------------------------------------------
 void Win32GameEngine::serviceWindowsOS()
 {
+#ifndef __EMSCRIPTEN__
 	MSG msg;
   Int returnValue;
 
-	//
-	// see if we have any messages to process, a nullptr window handle tells the
-	// OS to look at the main window associated with the calling thread, us!
-	//
 	while( PeekMessage( &msg, nullptr, 0, 0, PM_NOREMOVE ) )
 	{
-
-		// get the message
 		returnValue = GetMessage( &msg, nullptr, 0, 0 );
 
-		// this is one possible way to check for quitting conditions as a message
-		// of WM_QUIT will cause GetMessage() to return 0
-/*
-		if( returnValue == 0 )
-		{
-
-			setQuitting( true );
-			break;
-
-		}
-*/
-
 		TheMessageTime = msg.time;
-		// translate and dispatch the message
 		TranslateMessage( &msg );
 		DispatchMessage( &msg );
 		TheMessageTime = 0;
-
 	}
-
+#endif
 }
 

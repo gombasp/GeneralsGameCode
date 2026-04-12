@@ -30,8 +30,23 @@
 
 #include "Common/Registry.h"
 
+#ifdef __EMSCRIPTEN__
+// On Emscripten the Windows registry doesn't exist.
+// All functions return FALSE / empty string; settings come from INI files.
 
-Bool  getStringFromRegistry(HKEY root, AsciiString path, AsciiString key, AsciiString& val)
+Bool getStringFromRegistry(HKEY, AsciiString, AsciiString, AsciiString&)     { return FALSE; }
+Bool getUnsignedIntFromRegistry(HKEY, AsciiString, AsciiString, UnsignedInt&){ return FALSE; }
+Bool setStringInRegistry(HKEY, AsciiString, AsciiString, AsciiString)        { return FALSE; }
+Bool setUnsignedIntInRegistry(HKEY, AsciiString, AsciiString, UnsignedInt)   { return FALSE; }
+Bool GetStringFromGeneralsRegistry(AsciiString, AsciiString, AsciiString&)   { return FALSE; }
+Bool GetStringFromRegistry(AsciiString, AsciiString, AsciiString&)            { return FALSE; }
+Bool GetUnsignedIntFromRegistry(AsciiString, AsciiString, UnsignedInt&)       { return FALSE; }
+AsciiString GetRegistryLanguage()    { return AsciiString("english"); }
+AsciiString GetRegistryGameName()    { return AsciiString("GeneralsMPTest"); }
+UnsignedInt GetRegistryVersion()     { return 65536; }
+UnsignedInt GetRegistryMapPackVersion() { return 65536; }
+
+#else // !__EMSCRIPTEN__ — full Win32 implementation below
 {
 	HKEY handle;
 	unsigned char buffer[256];
@@ -200,3 +215,5 @@ UnsignedInt GetRegistryMapPackVersion()
 	GetUnsignedIntFromRegistry("", "MapPackVersion", val);
 	return val;
 }
+
+#endif // !__EMSCRIPTEN__

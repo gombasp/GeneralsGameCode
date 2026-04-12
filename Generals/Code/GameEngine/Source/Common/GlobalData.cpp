@@ -1311,7 +1311,15 @@ UnsignedInt GlobalData::generateExeCRC()
 
 AsciiString GlobalData::BuildUserDataPathFromIni()
 {
-#if defined(_MSC_VER) && (_MSC_VER < 1300)
+#ifdef __EMSCRIPTEN__
+	// On web, use Emscripten's IDBFS-backed /saves directory.
+	// EmscriptenMain.cpp mounts IDBFS at /saves on startup.
+	AsciiString path = "/saves/";
+	path.concat(TheWritableGlobalData->m_userDataLeafName.str());
+	if (!path.endsWith("/"))
+		path.concat('/');
+	return path;
+#else
 	// VC6 lacks FOLDERID_Documents and KF_FLAG_DEFAULT
 	const GUID FOLDERID_Documents = { 0xFDD39AD0, 0x238F, 0x46AF, 0xAD, 0xB4, 0x6C, 0x85, 0x48, 0x03, 0x69, 0xC7 };
 	const DWORD KF_FLAG_DEFAULT = 0;
@@ -1358,4 +1366,5 @@ AsciiString GlobalData::BuildUserDataPathFromIni()
 	}
 
 	return myDocumentsDirectory;
+#endif // __EMSCRIPTEN__
 }

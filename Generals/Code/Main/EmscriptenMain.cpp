@@ -159,6 +159,15 @@ int main(int /*argc*/, char** /*argv*/)
             'contextmenu', function(e) { e.preventDefault(); });
     );
 
+    // Mount IndexedDB-backed filesystem for save games
+    EM_ASM(
+        FS.mkdir('/saves');
+        FS.mount(IDBFS, {}, '/saves');
+        FS.syncfs(true, function(err) {
+            if (err) console.warn('[Generals] IDBFS sync error:', err);
+        });
+    );
+
     // Init engine
     TheGameEngine = CreateGameEngine();
     if (TheGameEngine) TheGameEngine->init();

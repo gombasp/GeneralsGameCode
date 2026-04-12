@@ -36,13 +36,22 @@
 #include "GameClient/ParticleSys.h"
 #include "GameLogic/GameLogic.h"
 #include "GameNetwork/NetworkInterface.h"
+#ifdef __EMSCRIPTEN__
+#include "EmscriptenDevice/NullAudioManager.h"
+#include "EmscriptenDevice/NullWebBrowser.h"
+#include "StdDevice/Common/StdBIGFileSystem.h"
+#include "StdDevice/Common/StdLocalFileSystem.h"
+#else
 #include "MilesAudioDevice/MilesAudioManager.h"
 #include "Win32Device/Common/Win32BIGFileSystem.h"
 #include "Win32Device/Common/Win32LocalFileSystem.h"
+#endif
 #include "W3DDevice/Common/W3DModuleFactory.h"
 #include "W3DDevice/GameLogic/W3DGameLogic.h"
 #include "W3DDevice/GameClient/W3DGameClient.h"
+#ifndef __EMSCRIPTEN__
 #include "W3DDevice/GameClient/W3DWebBrowser.h"
+#endif
 #include "W3DDevice/Common/W3DFunctionLexicon.h"
 #include "W3DDevice/Common/W3DRadar.h"
 #include "W3DDevice/Common/W3DThingFactory.h"
@@ -92,11 +101,39 @@ inline GameClient *Win32GameEngine::createGameClient() { return NEW W3DGameClien
 inline ModuleFactory *Win32GameEngine::createModuleFactory() { return NEW W3DModuleFactory; }
 inline ThingFactory *Win32GameEngine::createThingFactory() { return NEW W3DThingFactory; }
 inline FunctionLexicon *Win32GameEngine::createFunctionLexicon() { return NEW W3DFunctionLexicon; }
-inline LocalFileSystem *Win32GameEngine::createLocalFileSystem() { return NEW Win32LocalFileSystem; }
-inline ArchiveFileSystem *Win32GameEngine::createArchiveFileSystem() { return NEW Win32BIGFileSystem; }
+inline LocalFileSystem *Win32GameEngine::createLocalFileSystem()
+{
+#ifdef __EMSCRIPTEN__
+	return NEW StdLocalFileSystem;
+#else
+	return NEW Win32LocalFileSystem;
+#endif
+}
+inline ArchiveFileSystem *Win32GameEngine::createArchiveFileSystem()
+{
+#ifdef __EMSCRIPTEN__
+	return NEW StdBIGFileSystem;
+#else
+	return NEW Win32BIGFileSystem;
+#endif
+}
 inline ParticleSystemManager* Win32GameEngine::createParticleSystemManager(Bool dummy) { return dummy ? static_cast<ParticleSystemManager*>(NEW ParticleSystemManagerDummy) : NEW W3DParticleSystemManager; }
 
 inline NetworkInterface *Win32GameEngine::createNetwork() { return NetworkInterface::createNetwork(); }
 inline Radar *Win32GameEngine::createRadar() { return NEW W3DRadar; }
-inline WebBrowser *Win32GameEngine::createWebBrowser() { return NEW CComObject<W3DWebBrowser>; }
-inline AudioManager *Win32GameEngine::createAudioManager() { return NEW MilesAudioManager; }
+inline WebBrowser *Win32GameEngine::createWebBrowser()
+{
+#ifdef __EMSCRIPTEN__
+	return NEW NullWebBrowser;
+#else
+	return NEW CComObject<W3DWebBrowser>;
+#endif
+}
+inline AudioManager *Win32GameEngine::createAudioManager()
+{
+#ifdef __EMSCRIPTEN__
+	return NEW NullAudioManager;
+#else
+	return NEW MilesAudioManager;
+#endif
+}
