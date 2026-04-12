@@ -29,7 +29,9 @@
 //   the game application, it creates all the devices we will use for the game
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef __EMSCRIPTEN__
 #include <windows.h>
+#endif
 
 #include "Win32Device/Common/Win32GameEngine.h"
 #include "Common/PerfTimer.h"
