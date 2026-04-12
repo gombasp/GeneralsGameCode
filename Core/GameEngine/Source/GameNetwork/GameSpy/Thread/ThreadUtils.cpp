@@ -26,6 +26,8 @@
 // GameSpy thread utils
 // Author: Matthew D. Campbell, July 2002
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 //-------------------------------------------------------------------------
@@ -79,3 +81,5 @@ std::string WideCharStringToMultiByte( const WideChar *orig )
 
 //-------------------------------------------------------------------------
 
+
+#endif // __EMSCRIPTEN__

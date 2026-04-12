@@ -29,6 +29,9 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__
+
+
 #include "Common/AsciiString.h"
 #include "Common/STLTypedefs.h"
 
@@ -75,3 +78,5 @@ public:
 };
 
 extern GameSpyConfigInterface *TheGameSpyConfig;
+
+#endif // __EMSCRIPTEN__

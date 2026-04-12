@@ -28,6 +28,9 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__
+
+
 class GameSpyPlayerInfoInterface : public SubsystemInterface
 {
 public:
@@ -55,3 +58,5 @@ public:
 GameSpyPlayerInfoInterface *createGameSpyPlayerInfo();
 
 extern GameSpyPlayerInfoInterface *TheGameSpyPlayerInfo;
+
+#endif // __EMSCRIPTEN__

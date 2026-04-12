@@ -56,7 +56,9 @@
 #include "Common/GameEngine.h"
 #include "Common/GameLOD.h"
 #include "Common/GameState.h"
+#ifndef __EMSCRIPTEN__
 #include "Common/GameSpyMiscPreferences.h"
+#endif
 #include "Common/GlobalData.h"
 #include "Common/NameKeyGenerator.h"
 #include "Common/Player.h"
@@ -88,13 +90,27 @@
 #include "GameClient/CampaignManager.h"
 #include "GameClient/GameWindowTransitions.h"
 #include "GameClient/VideoPlayer.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PeerDefs.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/GameResultsThread.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/NetworkDefs.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/LANAPICallbacks.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpyOverlay.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/BuddyThread.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PersistentStorageThread.h"
+#endif
 #include "GameClient/InGameUI.h"
 
 

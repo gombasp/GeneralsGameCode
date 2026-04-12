@@ -100,10 +100,18 @@
 #include "Common/DataChunk.h"
 #include "GameLogic/Scripts.h"
 
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/BuddyThread.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PeerDefs.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/ThreadUtils.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/LANAPICallbacks.h"
+#endif
 #include "GameNetwork/NetworkInterface.h"
 
 DECLARE_PERF_TIMER(SleepyMaintenance)

@@ -29,6 +29,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // INCLUDES ///////////////////////////////////////////////////////////////////////////////////////
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "Common/STLTypedefs.h"
@@ -1535,3 +1537,5 @@ WindowMsgHandledType WOLLoginMenuSystem( GameWindow *window, UnsignedInt msg,
 }
 
 
+
+#endif // __EMSCRIPTEN__

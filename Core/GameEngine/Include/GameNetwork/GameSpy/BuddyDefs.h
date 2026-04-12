@@ -28,5 +28,10 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__
+
+
 void HandleBuddyResponses();
 void PopulateOldBuddyMessages();
+
+#endif // __EMSCRIPTEN__

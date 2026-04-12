@@ -29,6 +29,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // INCLUDES ///////////////////////////////////////////////////////////////////////////////////////
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "Common/GameEngine.h"
@@ -937,3 +939,5 @@ void playerTemplateListBoxTooltip(GameWindow *wndListBox, WinInstanceData *instD
 	// use no tooltip delay here
 	TheMouse->setCursorTooltip(ustringTooltip, 0);
 }
+
+#endif // __EMSCRIPTEN__

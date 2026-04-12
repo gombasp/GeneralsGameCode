@@ -26,6 +26,8 @@
 // GameSpy callbacks, etc
 // Author: Matthew D. Campbell, February 2002
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "gamespy/gp/gp.h"
@@ -1411,3 +1413,5 @@ void GameSpyChat::login(AsciiString loginName, AsciiString password, AsciiString
 		loginQuick(loginName);
 	}
 }
+
+#endif // __EMSCRIPTEN__

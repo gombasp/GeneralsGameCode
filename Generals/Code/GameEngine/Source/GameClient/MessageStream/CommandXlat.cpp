@@ -86,8 +86,12 @@
 
 #include "GameNetwork/NetworkInterface.h"
 #include "GameNetwork/GameInfo.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpyOverlay.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/BuddyThread.h"
+#endif
 
 #include "ww3d.h"
 

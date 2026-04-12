@@ -28,6 +28,9 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__ // GameSpy not available on web
+
+
 #include "gamespy/peer/peer.h"
 
 #include "GameClient/Color.h"
@@ -140,3 +143,5 @@ enum GameSpyColors CPP_11(: Int) {
 };
 
 extern const Color GameSpyColor[GSCOLOR_MAX];
+
+#endif // __EMSCRIPTEN__

@@ -29,6 +29,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // INCLUDES ///////////////////////////////////////////////////////////////////////////////////////
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "Common/GameEngine.h"
@@ -237,3 +239,5 @@ WindowMsgHandledType WOLQMScoreScreenSystem( GameWindow *window, UnsignedInt msg
 
 	return MSG_HANDLED;
 }
+
+#endif // __EMSCRIPTEN__

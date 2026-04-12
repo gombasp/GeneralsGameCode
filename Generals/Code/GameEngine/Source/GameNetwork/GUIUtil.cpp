@@ -28,7 +28,9 @@
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "GameNetwork/GUIUtil.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/NetworkDefs.h"
+#endif
 #include "GameClient/GameWindowManager.h"
 #include "GameClient/MapUtil.h"
 #include "Common/NameKeyGenerator.h"
@@ -42,7 +44,9 @@
 #include "GameClient/GameText.h"
 #include "GameNetwork/GameInfo.h"
 #include "Common/PlayerTemplate.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/LANAPICallbacks.h" // for acceptTrueColor, etc
+#endif
 
 
 // -----------------------------------------------------------------------------

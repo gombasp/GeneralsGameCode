@@ -29,6 +29,8 @@
 // the game.
 // Author: Matthew D. Campbell, June 2002
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "Common/Registry.h"
@@ -2989,3 +2991,5 @@ static void listingGamesCallback(PEER peer, PEERBool success, const char * name,
 
 //-------------------------------------------------------------------------
 
+
+#endif // __EMSCRIPTEN__

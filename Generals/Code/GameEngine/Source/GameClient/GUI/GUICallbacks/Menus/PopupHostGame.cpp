@@ -63,12 +63,22 @@
 #include "GameClient/GadgetCheckBox.h"
 #include "GameClient/GadgetComboBox.h"
 #include "GameClient/GadgetListBox.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/GSConfig.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PeerDefs.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PeerThread.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpyOverlay.h"
+#endif
 
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/LadderDefs.h"
+#endif
 #include "Common/CustomMatchPreferences.h"
 #include "Common/LadderPreferences.h"
 

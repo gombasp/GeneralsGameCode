@@ -28,6 +28,9 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__
+
+
 #include "gamespy/peer/peer.h"
 
 class GameWindow;
@@ -53,3 +56,5 @@ void RoomMessageCallback(PEER peer, RoomType roomType,
 void PlayerMessageCallback(PEER peer, const char * nick,
 													 const char * message, MessageType messageType,
 													 void * param);														///< Called when a private message is received from another player.
+
+#endif // __EMSCRIPTEN__

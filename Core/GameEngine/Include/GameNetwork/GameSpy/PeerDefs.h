@@ -28,6 +28,9 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__
+
+
 #include "gamespy/peer/peer.h"
 #include "gamespy/gp/gp.h"
 
@@ -295,3 +298,5 @@ extern Int GetAdditionalDisconnectsFromUserFile(Int playerID);
 
 void SetUpGameSpy( const char *motdBuffer, const char *configBuffer );
 void TearDownGameSpy();
+
+#endif // __EMSCRIPTEN__

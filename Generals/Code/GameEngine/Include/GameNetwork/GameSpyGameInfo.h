@@ -28,6 +28,9 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__
+
+
 #error this file is obsolete
 #include "gamespy/peer/peer.h"
 
@@ -90,3 +93,5 @@ void WOLDisplaySlotList();
 void GameSpyStartGame();
 void GameSpyLaunchGame();
 Bool GetLocalChatConnectionAddress(AsciiString serverName, UnsignedShort serverPort, UnsignedInt& localIP);
+
+#endif // __EMSCRIPTEN__

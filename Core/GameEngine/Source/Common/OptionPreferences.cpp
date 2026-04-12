@@ -43,7 +43,9 @@
 
 #include "GameLogic/ScriptEngine.h"
 
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/IPEnumeration.h"
+#endif
 
 OptionPreferences::OptionPreferences()
 {

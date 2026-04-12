@@ -65,10 +65,18 @@
 #include "GameClient/ShellHooks.h"
 #include "GameClient/GUICallbacks.h"
 #include "GameClient/GlobalLanguage.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/FirewallHelper.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/IPEnumeration.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpyOverlay.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PeerDefs.h"
+#endif
 #include "GameLogic/GameLogic.h"
 #include "GameLogic/ScriptEngine.h"
 #include "WWDownload/Registry.h"

@@ -30,7 +30,9 @@
 #include "Common/NameKeyGenerator.h"
 #include "GameClient/EstablishConnectionsMenu.h"
 #include "GameNetwork/GUIUtil.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/StagingRoomGameInfo.h"
+#endif
 
 static WindowLayout *establishConnectionsLayout;
 

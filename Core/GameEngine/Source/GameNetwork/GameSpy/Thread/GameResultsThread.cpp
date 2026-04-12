@@ -26,6 +26,8 @@
 // Ping thread
 // Author: Matthew D. Campbell, August 2002
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include <winsock.h>	// This one has to be here. Prevents collisions with winsock2.h
@@ -390,3 +392,5 @@ Int GameResultsThreadClass::sendGameResults( UnsignedInt IP, UnsignedShort port,
 
 
 //-------------------------------------------------------------------------
+
+#endif // __EMSCRIPTEN__

@@ -60,15 +60,25 @@
 #include "GameClient/HotKey.h"
 #include "GameLogic/GameLogic.h"
 #include "GameLogic/ScriptEngine.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpyOverlay.h"
+#endif
 #include "GameClient/GameWindowTransitions.h"
 
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PeerDefs.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PeerThread.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/BuddyThread.h"
+#endif
 
 #include "GameNetwork/DownloadManager.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/MainMenuUtils.h"
+#endif
 
 #include "GameClient/InGameUI.h"
 

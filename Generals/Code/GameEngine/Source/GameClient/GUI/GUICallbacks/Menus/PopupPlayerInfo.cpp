@@ -34,7 +34,9 @@
 #include "Common/PlayerTemplate.h"
 #include "Common/BattleHonors.h"
 #include "Common/CustomMatchPreferences.h"
+#ifndef __EMSCRIPTEN__
 #include "Common/GameSpyMiscPreferences.h"
+#endif
 #include "Common/FileSystem.h"
 #include "GameClient/Mouse.h"
 #include "GameClient/GameText.h"
@@ -48,15 +50,31 @@
 #include "GameClient/GadgetStaticText.h"
 #include "GameClient/Display.h"
 #include "GameClient/MessageBox.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpyOverlay.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PeerDefs.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PeerThread.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PersistentStorageDefs.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PersistentStorageThread.h"
+#endif
 #include "GameNetwork/RankPointValue.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/BuddyThread.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/GSConfig.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/LobbyUtils.h"
+#endif
 
 #include "WWDownload/Registry.h"
 

@@ -29,6 +29,8 @@
 // the game.
 // Author: Matthew D. Campbell, June 2002
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "GameNetwork/GameSpy/BuddyThread.h"
@@ -681,3 +683,5 @@ void BuddyThreadClass::statusCallback( GPConnection *con, GPRecvBuddyStatusArg *
 
 //-------------------------------------------------------------------------
 
+
+#endif // __EMSCRIPTEN__

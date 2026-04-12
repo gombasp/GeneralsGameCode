@@ -26,6 +26,8 @@
 // GameSpy GP callbacks, utils, etc
 // Author: Matthew D. Campbell, February 2002
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "GameClient/GameText.h"
@@ -160,3 +162,5 @@ void GPRecvBuddyRequestCallback(GPConnection * connection, GPRecvBuddyRequestArg
 {
 	DEBUG_LOG(("GPRecvBuddyRequestCallback: %d wants to be our buddy because '%s'", arg->profile, arg->reason));
 }
+
+#endif // __EMSCRIPTEN__

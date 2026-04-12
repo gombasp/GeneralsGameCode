@@ -29,6 +29,8 @@
 // Desc:   Resolves NAT'd IPs and port numbers for the other players in a game.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "GameNetwork/NAT.h"
@@ -1288,3 +1290,5 @@ void NAT::setConnectionState(Int nodeNumber, NATConnectionState state) {
 	}
 	TheEstablishConnectionsMenu->setPlayerStatus(slot, state);
 }
+
+#endif // __EMSCRIPTEN__

@@ -28,6 +28,8 @@
 // Description: WOL Game Options Menu
 ///////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "Common/GameEngine.h"
@@ -2673,3 +2675,5 @@ WindowMsgHandledType WOLGameSetupMenuSystem( GameWindow *window, UnsignedInt msg
 }
 
 
+
+#endif // __EMSCRIPTEN__

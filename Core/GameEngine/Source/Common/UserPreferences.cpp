@@ -36,7 +36,9 @@
 //-----------------------------------------------------------------------------
 // USER INCLUDES //////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
+#ifndef __EMSCRIPTEN__
 #include "Common/GameSpyMiscPreferences.h"
+#endif
 #include "Common/UserPreferences.h"
 #include "Common/LadderPreferences.h"
 #include "Common/Player.h"
@@ -49,7 +51,9 @@
 #include "Common/MultiplayerSettings.h"
 #include "GameClient/MapUtil.h"
 #include "GameClient/ChallengeGenerals.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PeerDefs.h"
+#endif
 
 
 //-----------------------------------------------------------------------------

@@ -29,6 +29,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // INCLUDES ///////////////////////////////////////////////////////////////////////////////////////
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "Lib/BaseType.h"
@@ -230,3 +232,5 @@ WindowMsgHandledType WOLCustomScoreScreenSystem( GameWindow *window, UnsignedInt
 
 	return MSG_HANDLED;
 }
+
+#endif // __EMSCRIPTEN__

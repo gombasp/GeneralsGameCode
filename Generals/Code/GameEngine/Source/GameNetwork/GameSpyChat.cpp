@@ -26,6 +26,8 @@
 // GameSpy chat handlers
 // Author: Matthew D. Campbell, February 2002
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "GameClient/GameText.h"
@@ -453,3 +455,5 @@ void GameSpyAddText( UnicodeString message, GameSpyColors color )
 
 }
 
+
+#endif // __EMSCRIPTEN__

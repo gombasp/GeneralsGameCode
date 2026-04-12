@@ -58,7 +58,9 @@
 #include "GameLogic/GameLogic.h"
 
 #include "GameNetwork/DownloadManager.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/MainMenuUtils.h"
+#endif
 
 // PRIVATE DATA ///////////////////////////////////////////////////////////////////////////////////
 static NameKeyType buttonCancelID = NAMEKEY_INVALID;

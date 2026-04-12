@@ -27,6 +27,8 @@
 // Author: Chris Huybregts, October 2001
 // Description: LAN API Callbacks
 ///////////////////////////////////////////////////////////////////////////////////////
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "strtok_r.h"
@@ -733,3 +735,5 @@ void LANAPI::OnChat( UnicodeString player, UnsignedInt ip, UnicodeString message
 	}
 	GadgetListBoxSetItemData(chatWindow, (void *)-1, index);
 }
+
+#endif // __EMSCRIPTEN__

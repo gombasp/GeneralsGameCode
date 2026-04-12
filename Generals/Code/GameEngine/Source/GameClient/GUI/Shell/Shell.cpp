@@ -39,8 +39,12 @@
 #include "GameClient/AnimateWindowManager.h"
 #include "GameClient/ShellMenuScheme.h"
 #include "GameLogic/GameLogic.h"
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpyOverlay.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/GameSpy/PeerDefsImplementation.h"
+#endif
 
 // PUBLIC DATA ////////////////////////////////////////////////////////////////////////////////////
 Shell *TheShell = nullptr;  ///< the shell singleton definition

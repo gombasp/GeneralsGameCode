@@ -28,6 +28,9 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__
+
+
 #include "gamespy/gp/gp.h"
 
 void GPRecvBuddyRequestCallback(GPConnection * connection, GPRecvBuddyRequestArg * arg, void * param);
@@ -40,3 +43,5 @@ void GameSpyUpdateBuddyOverlay();
 extern GPConnection *TheGPConnection;
 
 Bool IsGameSpyBuddy(GPProfile id);
+
+#endif // __EMSCRIPTEN__

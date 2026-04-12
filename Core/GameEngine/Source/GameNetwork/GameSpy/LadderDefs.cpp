@@ -26,6 +26,8 @@
 // Generals ladder code
 // Author: Matthew D. Campbell, August 2002
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "GameNetwork/GameSpy/ThreadUtils.h"
@@ -523,3 +525,5 @@ void LadderList::checkLadder( AsciiString fname, Int index )
 	DEBUG_LOG(("Adding local ladder %ls", li->name.str()));
 	m_localLadders.push_back(li);
 }
+
+#endif // __EMSCRIPTEN__

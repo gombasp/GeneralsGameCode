@@ -28,6 +28,9 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__
+
+
 #include "mutex.h"
 #include "thread.h"
 
@@ -60,3 +63,5 @@ private:
 
 extern GameSpyThreadClass *TheGameSpyThread;
 extern MutexClass TheGameSpyMutex;
+
+#endif // __EMSCRIPTEN__

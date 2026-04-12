@@ -26,6 +26,8 @@
 // Westwood Online screen setup/teardown
 // Author: Matthew D. Campbell, November 2001
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 #include "Common/AudioEventRTS.h"
 
@@ -331,3 +333,5 @@ void CheckReOpenPlayerInfo()
 	reOpenPlayerInfoFlag = FALSE;
 
 }
+
+#endif // __EMSCRIPTEN__

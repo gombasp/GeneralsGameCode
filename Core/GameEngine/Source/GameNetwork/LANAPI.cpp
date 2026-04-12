@@ -22,6 +22,8 @@
 //																																						//
 ////////////////////////////////////////////////////////////////////////////////
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #define WIN32_LEAN_AND_MEAN  // only bare bones windows stuff wanted
@@ -1298,3 +1300,5 @@ void LANAPI::setIsActive(Bool isActive) {
 	}
 	m_isActive = isActive;
 }
+
+#endif // __EMSCRIPTEN__

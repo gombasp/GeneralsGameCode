@@ -255,7 +255,12 @@ Bool Network::isPlayerConnected( Int playerID ) {
  */
 NetworkInterface *NetworkInterface::createNetwork()
 {
+#ifdef __EMSCRIPTEN__
+	// Online multiplayer not available on web — return null.
+	return nullptr;
+#else
 	return NEW Network;
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////

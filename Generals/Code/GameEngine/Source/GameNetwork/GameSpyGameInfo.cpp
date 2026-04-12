@@ -26,6 +26,8 @@
 // GameSpy game setup state info
 // Author: Matthew D. Campbell, December 2001
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "Common/GameEngine.h"
@@ -749,3 +751,5 @@ AsciiString GameSpyGameInfo::generateGameResultsPacket()
 	return results;
 }
 
+
+#endif // __EMSCRIPTEN__

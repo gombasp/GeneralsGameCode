@@ -26,6 +26,8 @@
 // Generals GameSpy GameInfo-related code
 // Author: Matthew D. Campbell, July 2002
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "Common/GameState.h"
@@ -883,3 +885,5 @@ void GameSpyStagingRoom::reset()
 #endif
 	GameInfo::reset();
 }
+
+#endif // __EMSCRIPTEN__

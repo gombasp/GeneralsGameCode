@@ -26,6 +26,8 @@
 // GameSpy Persistent Storage callbacks, utils, etc
 // Author: Matthew D. Campbell, March 2002
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "gamespy/gstats/gpersist.h"
@@ -390,3 +392,5 @@ static Bool gameSpyInitPersistentStorageConnection()
 	return isProfileAuthorized;
 }
 
+
+#endif // __EMSCRIPTEN__

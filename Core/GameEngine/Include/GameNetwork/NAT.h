@@ -29,6 +29,9 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__
+
+
 #include "Lib/BaseType.h"
 #include "GameNetwork/NetworkInterface.h"
 #include "GameNetwork/FirewallHelper.h"
@@ -155,3 +158,5 @@ protected:
 };
 
 extern NAT *TheNAT;
+
+#endif // __EMSCRIPTEN__

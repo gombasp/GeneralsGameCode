@@ -28,6 +28,8 @@
 // Description: LAN callback handlers
 ///////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "Common/crc.h"
@@ -723,3 +725,5 @@ void LANAPI::handleInActive(LANMessage *msg, UnsignedInt senderIP) {
 	RequestGameOptions(options, FALSE);
 	lanUpdateSlotList();
 }
+
+#endif // __EMSCRIPTEN__

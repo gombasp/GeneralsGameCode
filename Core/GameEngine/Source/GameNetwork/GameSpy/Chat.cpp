@@ -26,6 +26,8 @@
 // Generals GameSpy chat-related code
 // Author: Matthew D. Campbell, July 2002
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "Common/AudioEventRTS.h"
@@ -349,3 +351,5 @@ void GameSpyInfo::unregisterTextWindow( GameWindow *win )
 	m_textWindows.erase(win);
 }
 
+
+#endif // __EMSCRIPTEN__

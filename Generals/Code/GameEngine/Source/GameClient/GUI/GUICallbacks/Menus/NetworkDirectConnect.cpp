@@ -46,9 +46,15 @@
 #include "GameClient/Shell.h"
 #include "GameClient/GameWindowTransitions.h"
 
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/IPEnumeration.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/LANAPI.h"
+#endif
+#ifndef __EMSCRIPTEN__
 #include "GameNetwork/LANAPICallbacks.h"
+#endif
 
 
 // window ids ------------------------------------------------------------------------------

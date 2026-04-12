@@ -28,6 +28,9 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__
+
+
 #include "Common/NameKeyGenerator.h"
 #include "GameClient/WindowLayout.h"
 #include "GameClient/Gadget.h"
@@ -63,3 +66,5 @@ void GameSpyToggleOverlay( GSOverlayType );
 void GameSpyUpdateOverlays();
 void ReOpenPlayerInfo();
 void CheckReOpenPlayerInfo();
+
+#endif // __EMSCRIPTEN__

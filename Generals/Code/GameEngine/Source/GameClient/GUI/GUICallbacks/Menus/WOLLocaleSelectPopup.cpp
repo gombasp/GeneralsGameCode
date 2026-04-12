@@ -29,6 +29,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // INCLUDES ///////////////////////////////////////////////////////////////////////////////////////
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "GameClient/GameText.h"
@@ -228,3 +230,5 @@ WindowMsgHandledType WOLLocaleSelectSystem( GameWindow *window, UnsignedInt msg,
 
 	return MSG_HANDLED;
 }
+
+#endif // __EMSCRIPTEN__

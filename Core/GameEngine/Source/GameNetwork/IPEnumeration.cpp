@@ -22,6 +22,8 @@
 //																																						//
 ////////////////////////////////////////////////////////////////////////////////
 
+#ifndef __EMSCRIPTEN__
+
 #include "PreRTS.h"	// This must go first in EVERY cpp file in the GameEngine
 
 #include "GameNetwork/IPEnumeration.h"
@@ -194,3 +196,5 @@ AsciiString IPEnumeration::getMachineName()
 }
 
 
+
+#endif // __EMSCRIPTEN__
