@@ -34,6 +34,19 @@
 extern PerfGather TheCritSecPerfGather;
 #endif
 
+#ifdef __EMSCRIPTEN__
+// Emscripten runs single-threaded by default — CriticalSection is a no-op.
+// If -sUSE_PTHREADS is ever enabled, replace with pthread_mutex_t.
+class CriticalSection
+{
+public:
+    CriticalSection()  {}
+    virtual ~CriticalSection() {}
+    void enter() {}
+    void exit()  {}
+};
+#else
+
 class CriticalSection
 {
 	CRITICAL_SECTION m_windowsCriticalSection;
@@ -91,6 +104,8 @@ class ScopedCriticalSection
 				m_cs->exit();
 		}
 };
+
+#endif // __EMSCRIPTEN__
 
 // These should be null on creation then non-null in WinMain or equivalent.
 // This allows us to be silently non-threadsafe for WB and other single-threaded apps.

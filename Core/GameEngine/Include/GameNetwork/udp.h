@@ -28,11 +28,24 @@
 #include <errno.h>
 #endif
 
-#ifdef _WIN32
+#ifdef __EMSCRIPTEN__
+// Emscripten provides POSIX socket headers routed through WebSockets
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <limits.h>
+// Winsock compat aliases
+#define SOCKET          int
+#define INVALID_SOCKET  (-1)
+#define SOCKET_ERROR    (-1)
+#define closesocket     close
+#define WSAGetLastError() errno
+#elif defined(_WIN32)
 #include <winsock.h>
-#ifndef __EMSCRIPTEN__
-#include <io.h>
-#endif
 //#define close _close
 //#define read  _read
 //#define write _write

@@ -52,7 +52,9 @@
 #include "dx8caps.h"
 #include "missingtexture.h"
 #include "TARGA.h"
+#ifndef __EMSCRIPTEN__
 #include <d3dx8tex.h>
+#endif
 #include "wwmemlog.h"
 #include "formconv.h"
 #include "texturethumbnail.h"
@@ -260,6 +262,52 @@ IDirect3DTexture8* Load_Compressed_Texture(
 	// Note that the nearest valid format could be anything, even uncompressed.
 	if (dest_format==WW3D_FORMAT_UNKNOWN) dest_format=Get_Valid_Texture_Format(dds_file.Get_Format(),true);
 
+#ifdef __EMSCRIPTEN__
+	// WebGL2 path: upload DXT data directly via glCompressedTexImage2D
+	// The raw DXT bytes from the DDS file are exactly what the S3TC extension expects.
+
+	// Map WW3DFormat → GL compressed internal format
+	auto WW3DFormatToGLCompressed = [](WW3DFormat fmt) -> GLenum {
+		switch (fmt) {
+		case WW3D_FORMAT_DXT1: return 0x83F1; // GL_COMPRESSED_RGBA_S3TC_DXT1_EXT
+		case WW3D_FORMAT_DXT2: return 0x83F2; // GL_COMPRESSED_RGBA_S3TC_DXT3_EXT (DXT2 = DXT3 with premult alpha)
+		case WW3D_FORMAT_DXT3: return 0x83F2; // GL_COMPRESSED_RGBA_S3TC_DXT3_EXT
+		case WW3D_FORMAT_DXT4: return 0x83F3; // GL_COMPRESSED_RGBA_S3TC_DXT5_EXT (DXT4 = DXT5 with premult alpha)
+		case WW3D_FORMAT_DXT5: return 0x83F3; // GL_COMPRESSED_RGBA_S3TC_DXT5_EXT
+		default:               return 0;
+		}
+	};
+
+	GLenum gl_format = WW3DFormatToGLCompressed(dds_file.Get_Format());
+	if (gl_format == 0) return nullptr; // unsupported compressed format
+
+	GLuint tex = 0;
+	glGenTextures(1, &tex);
+	glBindTexture(GL_TEXTURE_2D, tex);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mips > 1 ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	unsigned mip_count = (mip_level_count == MIP_LEVELS_1) ? 1 : mips;
+	for (unsigned level = 0; level < mip_count; ++level) {
+		unsigned w = dds_file.Get_Width(level);
+		unsigned h = dds_file.Get_Height(level);
+		unsigned size = dds_file.Get_Level_Size(level);
+		const void* data = dds_file.Get_Memory_Pointer(level);
+		glCompressedTexImage2D(GL_TEXTURE_2D, (GLint)level, gl_format,
+		                       (GLsizei)w, (GLsizei)h, 0, (GLsizei)size, data);
+	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	// Return the GLuint cast to IDirect3DTexture8* — callers treat this as
+	// an opaque handle; on Emscripten Set_D3D_Texture stores it unchanged.
+	return reinterpret_cast<IDirect3DTexture8*>((uintptr_t)tex);
+
+#else
+	// Original D3D path
 	IDirect3DTexture8* d3d_texture = DX8Wrapper::_Create_DX8_Texture
 	(
 		width,
@@ -276,6 +324,7 @@ IDirect3DTexture8* Load_Compressed_Texture(
 		d3d_surface->Release();
 	}
 	return d3d_texture;
+#endif
 }
 
 static bool Is_Format_Compressed(WW3DFormat texture_format,bool allow_compression)

@@ -316,6 +316,26 @@ bool WebGL2Wrapper::Init(const char* canvas_id, int width, int height)
     glFrontFace(GL_CCW);
     glViewport(0, 0, s_width, s_height);
 
+    // Check for S3TC (DXT) compressed texture support.
+    // WEBGL_compressed_texture_s3tc is present on virtually all desktop browsers.
+    // Without it DDS textures won't render, but the game will still start.
+    bool has_s3tc = false;
+#ifdef __EMSCRIPTEN__
+    has_s3tc = (bool)EM_ASM_INT({
+        var gl = Module.ctx || (typeof GL !== 'undefined' ? GL.currentContext && GL.currentContext.GLctx : null);
+        if (!gl) return 0;
+        return (gl.getExtension('WEBGL_compressed_texture_s3tc') ||
+                gl.getExtension('MOZ_WEBGL_compressed_texture_s3tc') ||
+                gl.getExtension('WEBKIT_WEBGL_compressed_texture_s3tc')) ? 1 : 0;
+    });
+    if (!has_s3tc) {
+        printf("[WebGL2] WARNING: WEBGL_compressed_texture_s3tc not available — DXT textures will be blank.\n");
+        printf("[WebGL2] Use a Chromium-based browser or Firefox for best compatibility.\n");
+    } else {
+        printf("[WebGL2] S3TC compressed textures supported.\n");
+    }
+#endif
+
     s_renderStateChanged = 0xFFFFFFFFu;
     s_initted = true;
     return true;
@@ -980,6 +1000,63 @@ TextureClass* WebGL2Wrapper::Create_Render_Target(int /*w*/, int /*h*/, int /*fo
 void WebGL2Wrapper::Create_Render_Target(int, int, int, int, TextureClass**, ZTextureClass**)
 {
     // TODO
+}
+
+// ===========================================================================
+// Texture creation
+// ===========================================================================
+GLuint WebGL2Wrapper::Create_Texture(unsigned w, unsigned h,
+                                     unsigned gl_internal_format,
+                                     unsigned gl_format,
+                                     unsigned gl_type,
+                                     bool mipmaps)
+{
+    GLuint tex = 0;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexImage2D(GL_TEXTURE_2D, 0, (GLint)gl_internal_format,
+                 (GLsizei)w, (GLsizei)h, 0,
+                 (GLenum)gl_format, (GLenum)gl_type, nullptr);
+    if (mipmaps) glGenerateMipmap(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    return tex;
+}
+
+GLuint WebGL2Wrapper::Create_Render_Target_Texture(unsigned w, unsigned h,
+                                                   unsigned gl_internal_format)
+{
+    GLuint tex = 0;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, (GLint)gl_internal_format,
+                 (GLsizei)w, (GLsizei)h, 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    return tex;
+}
+
+GLuint WebGL2Wrapper::Create_Depth_Texture(unsigned w, unsigned h)
+{
+    GLuint tex = 0;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8,
+                 (GLsizei)w, (GLsizei)h, 0,
+                 GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, nullptr);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    return tex;
 }
 
 // ===========================================================================
