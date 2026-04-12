@@ -59,7 +59,11 @@
 #	define DIRECTINPUT_VERSION	0x800
 #endif
 
+#ifdef __EMSCRIPTEN__
+#include <Utility/dik_compat.h>
+#else
 #include <dinput.h>
+#endif
 #include <Lib/BaseType.h>
 
 // USER INCLUDES //////////////////////////////////////////////////////////////

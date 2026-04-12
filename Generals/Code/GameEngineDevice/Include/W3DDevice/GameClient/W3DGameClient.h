@@ -50,14 +50,20 @@
 #else
 #include "VideoDevice/Bink/BinkVideoPlayer.h"
 #endif
+#ifdef __EMSCRIPTEN__
+#include "EmscriptenDevice/EmscriptenInput.h"
+#else
 #include "Win32Device/GameClient/Win32DIKeyboard.h"
 #include "Win32Device/GameClient/Win32DIMouse.h"
 #include "Win32Device/GameClient/Win32Mouse.h"
+#endif
 #include "W3DDevice/GameClient/W3DMouse.h"
 
 class ThingTemplate;
 
+#ifndef __EMSCRIPTEN__
 extern Win32Mouse *TheWin32Mouse;
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // PROTOTYPES /////////////////////////////////////////////////////////////////
@@ -126,6 +132,10 @@ protected:
 
 };
 
+#ifdef __EMSCRIPTEN__
+inline Keyboard *W3DGameClient::createKeyboard() { return NEW EmscriptenKeyboard; }
+inline Mouse    *W3DGameClient::createMouse()     { return NEW EmscriptenMouse; }
+#else
 inline Keyboard *W3DGameClient::createKeyboard() { return NEW DirectInputKeyboard; }
 inline Mouse *W3DGameClient::createMouse()
 {
@@ -134,3 +144,4 @@ inline Mouse *W3DGameClient::createMouse()
 	TheWin32Mouse = mouse;   ///< global cheat for the WndProc()
 	return mouse;
 }
+#endif
