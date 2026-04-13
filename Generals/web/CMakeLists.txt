@@ -106,12 +106,22 @@ target_include_directories(g_generals_web PRIVATE
     "${SRC_ROOT}/GameEngineDevice/Include"
     "${SRC_ROOT}/Libraries/Source/WWVegas"
     "${SRC_ROOT}/Libraries/Source/WWVegas/WW3D2"
+    "${SRC_ROOT}/Libraries/Source/WWVegas/WWLib"
+    "${SRC_ROOT}/Libraries/Source/WWVegas/WWMath"
+    "${SRC_ROOT}/Libraries/Source/WWVegas/WWDebug"
+    "${SRC_ROOT}/Libraries/Source/WWVegas/WWSaveLoad"
     "${SRC_ROOT}/Main"
     # Core
     "${CORE_ROOT}/GameEngine/Include"
     "${CORE_ROOT}/GameEngineDevice/Include"
     "${CORE_ROOT}/Libraries/Source/WWVegas"
     "${CORE_ROOT}/Libraries/Source/WWVegas/WW3D2"
+    "${CORE_ROOT}/Libraries/Source/WWVegas/WWLib"
+    "${CORE_ROOT}/Libraries/Source/WWVegas/WWMath"
+    "${CORE_ROOT}/Libraries/Source/WWVegas/WWDebug"
+    "${CORE_ROOT}/Libraries/Source/WWVegas/WWAudio"
+    "${CORE_ROOT}/Libraries/Source/WWVegas/WWSaveLoad"
+    "${CORE_ROOT}/Libraries/Source/WWVegas/WWStub"
     "${CORE_ROOT}/Libraries/Include"
     # Dependencies
     "${DEPS_ROOT}/Utility/Utility"
@@ -121,8 +131,10 @@ target_include_directories(g_generals_web PRIVATE
 # ---------------------------------------------------------------------------
 # Compile definitions
 # ---------------------------------------------------------------------------
+option(RTS_ZEROHOUR "Build Zero Hour (vs base Generals)" ON)
+
 target_compile_definitions(g_generals_web PRIVATE
-    RTS_GENERALS=1
+    $<IF:$<BOOL:${RTS_ZEROHOUR}>,RTS_ZEROHOUR=1,RTS_GENERALS=1>
     __EMSCRIPTEN__=1         # should already be set by toolchain, but be explicit
     NDEBUG                   # swap for RTS_DEBUG if you want a debug web build
 )
