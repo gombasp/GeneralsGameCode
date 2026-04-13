@@ -43,6 +43,23 @@
 #endif
 #pragma warning (pop)
 
+#ifdef __EMSCRIPTEN__
+// Miles Sound System handle stubs — all opaque pointers on web (audio via NullAudioManager)
+#include <stdint.h>
+typedef void*    HPROVIDER;
+typedef void*    HDIGDRIVER;
+typedef void*    HSAMPLE;
+typedef void*    H3DSAMPLE;
+typedef void*    H3DPOBJECT;
+typedef void*    HTIMER;
+typedef void*    LPWAVEFORMAT;
+typedef uint32_t U32;
+typedef int32_t  S32;
+#ifndef AILCALLBACK
+#  define AILCALLBACK
+#endif
+#endif // __EMSCRIPTEN__
+
 #include "Vector.h"
 #include "SoundBuffer.h"
 #include "AudioEvents.h"

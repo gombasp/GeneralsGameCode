@@ -64,7 +64,9 @@ class VertexMaterialClass : public W3DMPO, public RefCountClass
 {
 	W3DMPO_GLUE(VertexMaterialClass)
 
+	#ifndef __EMSCRIPTEN__
 	friend DX8Wrapper;
+	#endif
 
 public:
 	/*

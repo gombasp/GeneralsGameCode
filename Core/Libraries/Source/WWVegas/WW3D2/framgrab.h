@@ -87,6 +87,7 @@ protected:
 	void GrabAVI(void *BitmapPointer);
 	void GrabRawFrame(void *BitmapPointer);
 
+#ifndef __EMSCRIPTEN__
 	// avi settings
 	PAVIFILE				AVIFile;
 	long					*Bitmap;
@@ -96,6 +97,7 @@ protected:
 
 	// general purpose cleanup routine
 	void CleanupAVI();
+#endif // __EMSCRIPTEN__
 
 	// convert the SR image into AVI byte ordering
 	void ConvertFrame(void *BitmapPointer);
