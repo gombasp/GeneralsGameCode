@@ -32,7 +32,9 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__
 #include <windows.h>
+#endif
 #include "d3d8.h"
 
 // ***********************************

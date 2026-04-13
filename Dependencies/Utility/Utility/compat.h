@@ -19,6 +19,8 @@
 // This file contains macros to help compiling on non-windows platforms.
 #pragma once
 
+#include <Utility/CppMacros.h>
+
 #ifndef _WIN32
 // For size_t
 #include <cstddef>

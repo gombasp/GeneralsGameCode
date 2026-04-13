@@ -123,7 +123,8 @@ target_include_directories(g_generals_web PRIVATE
     "${CORE_ROOT}/Libraries/Source/WWVegas/WWSaveLoad"
     "${CORE_ROOT}/Libraries/Source/WWVegas/WWStub"
     "${CORE_ROOT}/Libraries/Include"
-    # Dependencies
+    # Dependencies — Utility/ subdirectory (for #include <Utility/...> headers)
+    "${DEPS_ROOT}/Utility"
     "${DEPS_ROOT}/Utility/Utility"
     "${DEPS_ROOT}/Utility/Include"
 )
