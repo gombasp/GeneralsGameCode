@@ -46,6 +46,8 @@
 #include "shader.h"
 #include "lightenvironment.h"
 #include "texture.h"
+#include "ww3dformat.h"
+#include "texturefilter.h"
 #include "dx8vertexbuffer.h"
 #include "dx8indexbuffer.h"
 #include "vertmaterial.h"
@@ -140,6 +142,13 @@ public:
     virtual void ReleaseResources()   = 0;
     virtual void ReAcquireResources() = 0;
 };
+
+// ===========================================================================
+//  D3D type stubs — not present on web, referenced by some headers
+// ===========================================================================
+struct IDirect3DTexture8    {};
+struct IDirect3DBaseTexture8{};
+struct IDirect3DSurface8    {};
 
 // ===========================================================================
 //  WebGL2Wrapper
@@ -522,7 +531,52 @@ private:
         VIEW_IDENTITY         = 1u << 19,
         TEXTURES_CHANGED      = 0xFFu << 6,
     };
+
+    // -----------------------------------------------------------------------
+    // Texture creation stubs — no IDirect3DTexture8 on web
+    // -----------------------------------------------------------------------
+    static IDirect3DTexture8* _Create_DX8_Texture(
+        unsigned, unsigned, WW3DFormat, MipCountType, int=0, bool=false)
+        { return nullptr; }
+    static IDirect3DTexture8* _Create_DX8_ZTexture(
+        unsigned, unsigned, WW3DZFormat, MipCountType, int=0)
+        { return nullptr; }
+    static IDirect3DTexture8* _Create_DX8_Texture(const char*, MipCountType)
+        { return nullptr; }
+    static IDirect3DTexture8* _Create_DX8_Texture(IDirect3DSurface8*, MipCountType)
+        { return nullptr; }
+    static IDirect3DSurface8* _Create_DX8_Surface(unsigned, unsigned, WW3DFormat)
+        { return nullptr; }
 };
+
+// ---------------------------------------------------------------------------
+// D3DPOOL / D3DTS stubs
+// ---------------------------------------------------------------------------
+enum { D3DPOOL_DEFAULT = 0, D3DPOOL_MANAGED = 1, D3DPOOL_SYSTEMMEM = 2 };
+enum { D3DTS_WORLD = 256, D3DTS_VIEW = 2, D3DTS_PROJECTION = 3 };
+
+// ---------------------------------------------------------------------------
+// FVFInfoClass stub for Emscripten
+// Matches the XYZ+Normal+UV2+Diffuse vertex layout used by dynamic meshes:
+//   pos(12) + normal(12) + uv0(8) + uv1(8) + diffuse(4) = 44 bytes
+// ---------------------------------------------------------------------------
+class W3DMPO;
+class FVFInfoClass {
+public:
+    FVFInfoClass(unsigned /*fvf*/) {}
+    unsigned Get_Location_Offset() const { return 0; }
+    unsigned Get_Normal_Offset()   const { return 12; }
+    unsigned Get_Tex_Offset(unsigned n) const { return 24 + n * 8; }
+    unsigned Get_Diffuse_Offset()  const { return 40; }
+    unsigned Get_Specular_Offset() const { return 44; }
+    unsigned Get_FVF()             const { return 0; }
+    unsigned Get_FVF_Size()        const { return 44; }
+    void Set_FVF(unsigned) const {}
+    void Set_FVF_Size(unsigned) const {}
+};
+
+// dynamic_fvf_type — used by DynamicVBAccessClass constructor in dynamesh/line3d
+static const unsigned dynamic_fvf_type = 0;
 
 // ---------------------------------------------------------------------------
 // Inline color utilities (identical math to DX8Wrapper inlines)

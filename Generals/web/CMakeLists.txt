@@ -58,6 +58,7 @@ file(GLOB_RECURSE WW3D2_SOURCES
 )
 list(FILTER WW3D2_SOURCES EXCLUDE REGEX "dx8wrapper\\.cpp$")
 list(FILTER WW3D2_SOURCES EXCLUDE REGEX "[Ff]ram[Gg]rab\\.cpp$")
+list(FILTER WW3D2_SOURCES EXCLUDE REGEX "formconv\\.cpp$")
 
 # ---------------------------------------------------------------------------
 # Generals game engine sources
