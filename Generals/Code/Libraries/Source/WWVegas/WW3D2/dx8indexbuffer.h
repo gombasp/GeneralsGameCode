@@ -42,7 +42,9 @@
 #include "wwdebug.h"
 #include "sphere.h"
 
+#ifndef __EMSCRIPTEN__
 class DX8Wrapper;
+#endif
 class SortingRendererClass;
 struct IDirect3DIndexBuffer8;
 class DX8IndexBufferClass;

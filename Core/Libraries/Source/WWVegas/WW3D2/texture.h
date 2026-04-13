@@ -54,7 +54,9 @@ struct IDirect3DTexture8;
 struct IDirect3DCubeTexture8;
 struct IDirect3DVolumeTexture8;
 
+#ifndef __EMSCRIPTEN__
 class DX8Wrapper;
+#endif
 class TextureLoader;
 class LoaderThreadClass;
 class TextureLoadTaskClass;

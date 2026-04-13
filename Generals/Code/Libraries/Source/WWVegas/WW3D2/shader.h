@@ -38,7 +38,9 @@
 
 #include "always.h"
 
+#ifndef __EMSCRIPTEN__
 class DX8Wrapper;
+#endif
 struct W3dMaterial3Struct;
 class StringClass;
 
@@ -76,7 +78,9 @@ enum ShaderShiftConstants
 
 class ShaderClass
 {
+#ifndef __EMSCRIPTEN__
 	friend DX8Wrapper;
+#endif
 
 	void	Apply();
 public:

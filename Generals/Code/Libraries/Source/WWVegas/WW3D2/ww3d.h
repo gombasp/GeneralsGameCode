@@ -45,7 +45,9 @@
 class		SceneClass;
 class		CameraClass;
 class		ShaderClass;
+#ifndef __EMSCRIPTEN__
 class		DX8Wrapper;
+#endif
 
 struct	RenderStatistics;
 class		FrameGrabClass;

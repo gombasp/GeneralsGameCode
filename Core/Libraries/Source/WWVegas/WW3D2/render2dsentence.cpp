@@ -41,6 +41,7 @@
 #include "wwmemlog.h"
 #include "dx8wrapper.h"
 
+#ifndef __EMSCRIPTEN__
 
 ////////////////////////////////////////////////////////////////////////////////////
 //	Local constants
@@ -1784,3 +1785,106 @@ FontCharsClass::Free_Character_Arrays ()
 
 	return ;
 }
+
+#else // __EMSCRIPTEN__ — stub implementations (no GDI / D3D font rasterization on web)
+
+#include "refcount.h"
+#include "render2d.h"
+
+// ---------------------------------------------------------------------------
+// Render2DSentenceClass stubs
+// ---------------------------------------------------------------------------
+Render2DSentenceClass::Render2DSentenceClass() :
+	Font(nullptr),
+	Location(0.0F,0.0F),
+	Cursor(0.0F,0.0F),
+	TextureOffset(0,0),
+	TextureStartX(0),
+	CurSurface(nullptr),
+	CurrTextureSize(0),
+	MonoSpaced(false),
+	IsClippedEnabled(false),
+	ClipRect(0,0,0,0),
+	BaseLocation(0,0),
+	LockedPtr(nullptr),
+	LockedStride(0),
+	TextureSizeHint(0),
+	WrapWidth(0),
+	Centered(false),
+	DrawExtents(0,0,0,0),
+	ParseHotKey(false),
+	useHardWordWrap(false)
+{
+	Shader = Render2DClass::Get_Default_Shader();
+}
+
+Render2DSentenceClass::~Render2DSentenceClass()
+{
+	REF_PTR_RELEASE(Font);
+}
+
+void Render2DSentenceClass::Set_Font(FontCharsClass *font)             { REF_PTR_SET(Font, font); }
+void Render2DSentenceClass::Reset_Polys()                              {}
+void Render2DSentenceClass::Reset()                                    {}
+void Render2DSentenceClass::Make_Additive()                            {}
+void Render2DSentenceClass::Set_Shader(ShaderClass)                    {}
+void Render2DSentenceClass::Render()                                   {}
+void Render2DSentenceClass::Set_Base_Location(const Vector2 &loc)      { BaseLocation = loc; }
+void Render2DSentenceClass::Set_Location(const Vector2 &loc)           { Location = loc; }
+Vector2 Render2DSentenceClass::Get_Text_Extents(const WCHAR*)          { return Vector2(0,0); }
+Vector2 Render2DSentenceClass::Get_Formatted_Text_Extents(const WCHAR*){ return Vector2(0,0); }
+void Render2DSentenceClass::Reset_Sentence_Data()                      {}
+void Render2DSentenceClass::Release_Pending_Surfaces()                 {}
+void Render2DSentenceClass::Build_Textures()                           {}
+void Render2DSentenceClass::Draw_Sentence(uint32)                      {}
+void Render2DSentenceClass::Record_Sentence_Chunk()                    {}
+void Render2DSentenceClass::Allocate_New_Surface(const WCHAR*, bool)   {}
+void Render2DSentenceClass::Build_Sentence_Centered(const WCHAR*, int*, int*) {}
+Vector2 Render2DSentenceClass::Build_Sentence_Not_Centered(const WCHAR*, int*, int*, bool) { return Vector2(0,0); }
+void Render2DSentenceClass::Build_Sentence(const WCHAR*, int*, int*)   {}
+
+// ---------------------------------------------------------------------------
+// FontCharsClass stubs
+// ---------------------------------------------------------------------------
+FontCharsClass::FontCharsClass() :
+	OldGDIFont(nullptr),
+	OldGDIBitmap(nullptr),
+	GDIFont(nullptr),
+	GDIBitmap(nullptr),
+	GDIBitmapBits(nullptr),
+	MemDC(nullptr),
+	CurrPixelOffset(0),
+	PointSize(0),
+	CharHeight(8),
+	UnicodeCharArray(nullptr),
+	FirstUnicodeChar(0xFFFF),
+	LastUnicodeChar(0),
+	IsBold(false)
+{
+	AlternateUnicodeFont = nullptr;
+	::memset(ASCIICharArray, 0, sizeof(ASCIICharArray));
+}
+
+FontCharsClass::~FontCharsClass()
+{
+	Free_Character_Arrays();
+}
+
+const FontCharsClassCharDataStruct* FontCharsClass::Get_Char_Data(WCHAR)           { return nullptr; }
+int   FontCharsClass::Get_Char_Width(WCHAR)                                        { return 8; }
+int   FontCharsClass::Get_Char_Spacing(WCHAR)                                      { return 8; }
+void  FontCharsClass::Blit_Char(WCHAR, uint16*, int, int, int)                     {}
+const FontCharsClassCharDataStruct* FontCharsClass::Store_GDI_Char(WCHAR)          { return nullptr; }
+void  FontCharsClass::Update_Current_Buffer(int)                                   {}
+bool  FontCharsClass::Create_GDI_Font(const char*)                                 { return false; }
+void  FontCharsClass::Free_GDI_Font()                                              {}
+bool  FontCharsClass::Initialize_GDI_Font(const char*, int, bool)                  { return false; }
+bool  FontCharsClass::Is_Font(const char*, int, bool)                              { return false; }
+void  FontCharsClass::Grow_Unicode_Array(WCHAR)                                    {}
+void  FontCharsClass::Free_Character_Arrays()
+{
+	if (UnicodeCharArray) { delete[] UnicodeCharArray; UnicodeCharArray = nullptr; }
+	::memset(ASCIICharArray, 0, sizeof(ASCIICharArray));
+}
+
+#endif // __EMSCRIPTEN__

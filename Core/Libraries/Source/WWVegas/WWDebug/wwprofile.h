@@ -44,6 +44,12 @@ typedef signed long long __int64;
 typedef signed long long _int64;
 #endif
 
+#ifdef __EMSCRIPTEN__
+#ifndef __int64
+typedef signed long long __int64;
+#endif
+#endif
+
 // enable profiling by default in debug mode.
 #ifdef WWDEBUG
 #define ENABLE_WWPROFILE

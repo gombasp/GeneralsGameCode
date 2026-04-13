@@ -40,11 +40,11 @@
 
 #include "always.h"
 #include "wwdebug.h"
+#ifndef __EMSCRIPTEN__
 #include "dx8fvf.h"
-
 const unsigned dynamic_fvf_type=D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX2|D3DFVF_DIFFUSE;
-
 class DX8Wrapper;
+#endif
 class SortingRendererClass;
 class Vector2;
 class Vector3;

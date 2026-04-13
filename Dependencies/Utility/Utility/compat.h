@@ -73,5 +73,9 @@
 #include "time_compat.h"
 #include "thread_compat.h"
 
+#ifdef __EMSCRIPTEN__
+#include "win32_types_compat.h"
+#endif
+
 #endif
 

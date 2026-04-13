@@ -306,6 +306,7 @@ inline int ioctlsocket(int s, long cmd, unsigned long* argp)
 #define lstrcat          strcat
 #define lstrlen          strlen
 #define lstrcmp          strcmp
+#define lstrcpyn         strncpy
 #define MAX_PATH         260
 // GetCurrentDirectory(size, buf) -> getcwd(buf, size) but different signature
 inline DWORD GetCurrentDirectory(DWORD sz, char* buf) {

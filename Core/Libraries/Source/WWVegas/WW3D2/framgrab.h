@@ -45,8 +45,10 @@
 #ifndef __EMSCRIPTEN__
 #include "windows.h"
 #endif
+#ifndef __EMSCRIPTEN__
 #include "windowsx.h"
 #include "vfw.h"
+#endif
 
 #if defined (_MSC_VER)
 #pragma warning (pop)
