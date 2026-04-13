@@ -38,41 +38,49 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # ---------------------------------------------------------------------------
 # Source roots (relative to this file which lives in Generals/)
 # ---------------------------------------------------------------------------
-set(SRC_ROOT    "${CMAKE_CURRENT_SOURCE_DIR}/Code")
-set(WW3D2_DIR   "${SRC_ROOT}/Libraries/Source/WWVegas/WW3D2")
-set(MAIN_DIR    "${SRC_ROOT}/Main")
+# Root directories (web/ is one level inside Generals/)
+set(GENERALS_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/..")
+set(REPO_ROOT     "${GENERALS_ROOT}/..")
+set(SRC_ROOT      "${GENERALS_ROOT}/Code")
+set(CORE_ROOT     "${REPO_ROOT}/Core")
+set(DEPS_ROOT     "${REPO_ROOT}/Dependencies")
+set(WW3D2_DIR     "${SRC_ROOT}/Libraries/Source/WWVegas/WW3D2")
+set(CORE_WW3D2    "${CORE_ROOT}/Libraries/Source/WWVegas/WW3D2")
+set(MAIN_DIR      "${SRC_ROOT}/Main")
 
 # ---------------------------------------------------------------------------
-# Collect WW3D2 sources – same list as the native CMakeLists.txt
-# but with webgl2wrapper.cpp added and dx8wrapper.cpp excluded
-# (dx8wrapper.cpp guards itself with #ifndef __EMSCRIPTEN__ but excluding
-#  it entirely avoids pulling in d3d8.h)
+# Collect WW3D2 sources (Generals-local copy + Core copy)
+# webgl2wrapper.cpp added, dx8wrapper.cpp excluded
 # ---------------------------------------------------------------------------
 file(GLOB_RECURSE WW3D2_SOURCES
     "${WW3D2_DIR}/*.cpp"
-    "${WW3D2_DIR}/*.h"
+    "${CORE_WW3D2}/*.cpp"
 )
 list(FILTER WW3D2_SOURCES EXCLUDE REGEX "dx8wrapper\\.cpp$")
 
 # ---------------------------------------------------------------------------
-# Game engine sources (adjust globs to match actual directory layout)
+# Generals game engine sources
 # ---------------------------------------------------------------------------
-file(GLOB_RECURSE GAME_SOURCES
-    "${SRC_ROOT}/GameEngine/*.cpp"
-    "${SRC_ROOT}/GameEngine/*.h"
-    "${SRC_ROOT}/GameEngineDevice/*.cpp"
-    "${SRC_ROOT}/GameEngineDevice/*.h"
+file(GLOB_RECURSE GENERALS_SOURCES
+    "${SRC_ROOT}/GameEngine/Source/*.cpp"
+    "${SRC_ROOT}/GameEngineDevice/Source/*.cpp"
     "${SRC_ROOT}/Libraries/Source/*.cpp"
-    "${SRC_ROOT}/Libraries/Source/*.h"
 )
-# Exclude WW3D2 (already captured above) and Win32-only device files
-list(FILTER GAME_SOURCES EXCLUDE REGEX "WW3D2/")
-list(FILTER GAME_SOURCES EXCLUDE REGEX "Win32Device/.*DirectInput")
-list(FILTER GAME_SOURCES EXCLUDE REGEX "Win32Device/.*DirectSound")
-list(FILTER GAME_SOURCES EXCLUDE REGEX "MilesSound")
+list(FILTER GENERALS_SOURCES EXCLUDE REGEX "WW3D2/")
+list(FILTER GENERALS_SOURCES EXCLUDE REGEX "WinMain\\.cpp$")
 
 # ---------------------------------------------------------------------------
-# Entry point: EmscriptenMain.cpp instead of WinMain.cpp
+# Core engine sources
+# ---------------------------------------------------------------------------
+file(GLOB_RECURSE CORE_SOURCES
+    "${CORE_ROOT}/GameEngine/Source/*.cpp"
+    "${CORE_ROOT}/GameEngineDevice/Source/*.cpp"
+    "${CORE_ROOT}/Libraries/Source/*.cpp"
+)
+list(FILTER CORE_SOURCES EXCLUDE REGEX "WW3D2/")
+
+# ---------------------------------------------------------------------------
+# Entry point
 # ---------------------------------------------------------------------------
 set(MAIN_SOURCES
     "${MAIN_DIR}/EmscriptenMain.cpp"
@@ -83,19 +91,31 @@ set(MAIN_SOURCES
 # ---------------------------------------------------------------------------
 add_executable(g_generals_web
     ${WW3D2_SOURCES}
-    ${GAME_SOURCES}
+    ${GENERALS_SOURCES}
+    ${CORE_SOURCES}
     ${MAIN_SOURCES}
 )
 
 # ---------------------------------------------------------------------------
-# Include paths (mirrors the native build)
+# Include paths
 # ---------------------------------------------------------------------------
 target_include_directories(g_generals_web PRIVATE
+    # Generals
     "${SRC_ROOT}/GameEngine/Include"
+    "${SRC_ROOT}/GameEngine/Include/Precompiled"
+    "${SRC_ROOT}/GameEngineDevice/Include"
     "${SRC_ROOT}/Libraries/Source/WWVegas"
     "${SRC_ROOT}/Libraries/Source/WWVegas/WW3D2"
     "${SRC_ROOT}/Main"
-    "${SRC_ROOT}/GameEngineDevice/Include"
+    # Core
+    "${CORE_ROOT}/GameEngine/Include"
+    "${CORE_ROOT}/GameEngineDevice/Include"
+    "${CORE_ROOT}/Libraries/Source/WWVegas"
+    "${CORE_ROOT}/Libraries/Source/WWVegas/WW3D2"
+    "${CORE_ROOT}/Libraries/Include"
+    # Dependencies
+    "${DEPS_ROOT}/Utility/Utility"
+    "${DEPS_ROOT}/Utility/Include"
 )
 
 # ---------------------------------------------------------------------------
@@ -133,10 +153,10 @@ target_link_options(g_generals_web PRIVATE
 
     # Pack assets directory into .data file
     # Adjust the path to wherever your game data lives relative to the build dir
-    --preload-file ${CMAKE_SOURCE_DIR}/Run/Data@/data
+    --preload-file ${CMAKE_CURRENT_SOURCE_DIR}/../Run/Data@/data
 
     # Use the custom HTML shell defined below
-    --shell-file ${CMAKE_CURRENT_SOURCE_DIR}/web/index_shell.html
+    --shell-file ${CMAKE_CURRENT_SOURCE_DIR}/index_shell.html
 
     # Debug helpers (comment out for release)
     # -sASSERTIONS=2
