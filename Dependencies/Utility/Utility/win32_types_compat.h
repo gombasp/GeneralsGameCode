@@ -293,3 +293,27 @@ inline int ioctlsocket(int s, long cmd, unsigned long* argp)
 #define FIONBIO 0x8004667EL
 #define SD_BOTH SHUT_RDWR
 #endif // __EMSCRIPTEN__
+
+// ---------------------------------------------------------------------------
+// Win32 string / file API aliases for Emscripten (POSIX equivalents)
+// ---------------------------------------------------------------------------
+#ifdef __EMSCRIPTEN__
+#include <string.h>
+#include <unistd.h>
+#define _strdup          strdup
+#define lstrcmpi         strcasecmp
+#define lstrcpy          strcpy
+#define lstrcat          strcat
+#define lstrlen          strlen
+#define lstrcmp          strcmp
+#define MAX_PATH         260
+// GetCurrentDirectory(size, buf) -> getcwd(buf, size) but different signature
+inline DWORD GetCurrentDirectory(DWORD sz, char* buf) {
+    return getcwd(buf, sz) ? (DWORD)strlen(buf) : 0;
+}
+// GetFileAttributes returns INVALID_FILE_ATTRIBUTES (0xFFFFFFFF) if not found
+inline DWORD GetFileAttributes(const char* path) {
+    return (access(path, F_OK) == 0) ? 0 : 0xFFFFFFFF;
+}
+#define INVALID_FILE_ATTRIBUTES ((DWORD)0xFFFFFFFF)
+#endif // __EMSCRIPTEN__

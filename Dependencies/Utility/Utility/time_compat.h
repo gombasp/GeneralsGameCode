@@ -19,6 +19,9 @@
 // This file contains the time functions for compatibility with non-windows platforms.
 #pragma once
 #include <time.h>
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
 
 #define TIMERR_NOERROR 0
 typedef int MMRESULT;

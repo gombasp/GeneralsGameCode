@@ -180,7 +180,11 @@ public:
         ;
 #else
         while (cs.Flag.test_and_set(std::memory_order_acq_rel)) {
+#if defined(__cpp_lib_atomic_wait) && !defined(__EMSCRIPTEN__)
             cs.Flag.wait(true, std::memory_order_relaxed);
+#else
+            // C++17 fallback: busy-spin (single-threaded on Emscripten, fine)
+#endif
         }
 #endif
     }
@@ -190,7 +194,9 @@ public:
       cs.Flag=0;
 #else
       cs.Flag.clear(std::memory_order_release);
+#if defined(__cpp_lib_atomic_wait) && !defined(__EMSCRIPTEN__)
       cs.Flag.notify_one();
+#endif
 #endif
     }
 

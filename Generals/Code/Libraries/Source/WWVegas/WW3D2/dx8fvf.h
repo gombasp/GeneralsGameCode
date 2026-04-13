@@ -41,6 +41,9 @@
 
 #pragma once
 
+#ifndef __EMSCRIPTEN__ // DX8 vertex format — not used on WebGL2
+
+
 #include "always.h"
 #include <d3d8.h>
 #ifdef WWDEBUG
@@ -279,3 +282,5 @@ public:
 	void Set_FVF(unsigned fvf) const { FVF=fvf; }
 	void Set_FVF_Size(unsigned size) const { fvf_size=size; }
 };
+
+#endif // __EMSCRIPTEN__

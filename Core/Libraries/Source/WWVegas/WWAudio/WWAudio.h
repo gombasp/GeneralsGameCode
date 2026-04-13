@@ -38,7 +38,9 @@
 
 #include "always.h"
 #pragma warning (push, 3)
+#ifndef __EMSCRIPTEN__
 #include "mss.h"
+#endif
 #pragma warning (pop)
 
 #include "Vector.h"

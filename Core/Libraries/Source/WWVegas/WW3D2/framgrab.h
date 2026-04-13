@@ -42,7 +42,9 @@
 #pragma warning (push, 3)	// (gth) system headers complain at warning level 4...
 #endif
 
+#ifndef __EMSCRIPTEN__
 #include "windows.h"
+#endif
 #include "windowsx.h"
 #include "vfw.h"
 
